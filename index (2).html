@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A & S</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#fdf8f2;
+  --blush:#f5ddd8;
+  --rose:#d4a5a5;
+  --dusty:#c49a9a;
+  --deep:#9e6e6e;
+  --sage:#b5c9ac;
+  --leaf:#7a9e6e;
+  --lavender:#ddd6ee;
+  --text:#3d3030;
+  --text-mid:#7a6060;
+  --text-light:#a89090;
+  --white:#ffffff;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden}
+
+/* ── PAGE SYSTEM ── */
+.page{position:fixed;inset:0;background:var(--cream);transition:opacity 0.45s ease,transform 0.45s ease;z-index:10;overflow-y:auto;overflow-x:hidden}
+.page.hidden{opacity:0;transform:translateY(28px);pointer-events:none}
+#page-home{z-index:10}
+#page-letters,#page-memories,#page-bucket{z-index:20}
+
+/* ── BACK BTN ── */
+.back-btn{
+  position:fixed;top:1.6rem;left:1.8rem;z-index:200;
+  display:flex;align-items:center;gap:0.5rem;
+  font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--text-mid);cursor:pointer;border:none;background:none;
+  font-family:'Jost',sans-serif;transition:color 0.2s,opacity 0.3s;
+  opacity:0;pointer-events:none;
+}
+.back-btn.visible{opacity:1;pointer-events:all}
+.back-btn:hover{color:var(--text)}
+.back-arrow{font-size:1rem;transition:transform 0.2s}
+.back-btn:hover .back-arrow{transform:translateX(-3px)}
+
+/* ── HERO ── */
+#hero{
+  height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 40% 30%,rgba(245,200,200,0.2),transparent 58%),
+             radial-gradient(ellipse at 68% 78%,rgba(181,201,172,0.16),transparent 55%),
+             var(--cream);
+  position:relative;overflow:hidden;
+}
+.hero-monogram{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(5rem,12vw,9rem);font-weight:300;
+  letter-spacing:0.12em;color:var(--text);line-height:1;
+  opacity:0;transform:translateY(16px);
+  animation:fadeUp 1.3s ease 0.2s forwards;
+}
+.hero-tagline{
+  font-size:0.75rem;font-weight:200;letter-spacing:0.4em;
+  text-transform:uppercase;color:var(--text-light);
+  margin-top:1.2rem;
+  opacity:0;transform:translateY(16px);
+  animation:fadeUp 1.3s ease 0.5s forwards;
+}
+.scroll-cue{
+  position:absolute;bottom:2.5rem;
+  display:flex;flex-direction:column;align-items:center;gap:0.5rem;
+  opacity:0;transform:translateY(16px);
+  animation:fadeUp 1s ease 1.4s forwards;
+  color:var(--text-light);font-size:0.68rem;letter-spacing:0.25em;text-transform:uppercase;
+}
+.scroll-line{
+  width:1px;height:44px;
+  background:linear-gradient(to bottom,var(--rose),transparent);
+  animation:linePulse 2.2s ease-in-out infinite;
+}
+@keyframes linePulse{0%,100%{opacity:0.4;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.2)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── HERO FLOWER ── */
+#flower-container{width:260px;height:360px;margin-bottom:2.5rem;opacity:1}
+#hero-flower{width:100%;height:100%;overflow:visible}
+
+/* ── SCROLL GROW SECTION ── */
+#flower-grow{min-height:400vh;position:relative;background:linear-gradient(to bottom,var(--cream),#fef5f0 30%,#fdf0f5 70%,var(--cream))}
+.sticky-wrap{position:sticky;top:0;height:100vh;display:flex;align-items:center;justify-content:center}
+.grow-scene{position:relative;width:340px;height:500px}
+#grow-svg{width:100%;height:100%;overflow:visible}
+.bloom-label{
+  position:absolute;bottom:-2.5rem;left:50%;transform:translateX(-50%);
+  font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-style:italic;
+  color:var(--text-light);white-space:nowrap;opacity:0;transition:opacity 0.8s;pointer-events:none;
+}
+
+/* ── HOME NAV ── */
+#home-nav{padding:5rem 2rem 4rem;text-align:center}
+.nav-eyebrow{font-size:0.68rem;letter-spacing:0.38em;text-transform:uppercase;color:var(--text-light);margin-bottom:1rem}
+.nav-heading{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3rem);font-weight:300;margin-bottom:3.5rem}
+.nav-cards{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;max-width:960px;margin:0 auto}
+.nav-card{
+  flex:1;min-width:240px;max-width:290px;
+  background:var(--white);border-radius:24px;padding:3rem 2rem;
+  cursor:pointer;border:1px solid rgba(212,165,165,0.18);
+  box-shadow:0 6px 30px rgba(180,130,130,0.08);
+  transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.3s;
+  display:flex;flex-direction:column;align-items:center;gap:1.2rem;
+}
+.nav-card:hover{transform:translateY(-8px);box-shadow:0 18px 48px rgba(180,130,130,0.16)}
+.card-icon{font-size:2.4rem;line-height:1}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:400}
+.card-desc{font-size:0.76rem;color:var(--text-light);letter-spacing:0.05em;line-height:1.7;text-align:center}
+
+/* ── INNER PAGE LAYOUT ── */
+.page-hero{
+  padding:4rem 2rem 2.5rem;text-align:center;
+  background:linear-gradient(to bottom,#fef5f2,var(--cream));
+  border-bottom:1px solid rgba(212,165,165,0.12);
+}
+.page-hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,6vw,4rem);font-weight:300;margin-bottom:0.5rem}
+.page-hero-sub{font-size:0.73rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--text-light)}
+.page-content{max-width:1100px;margin:0 auto;padding:3rem 2rem 6rem}
+
+/* ── FAB ── */
+.fab{
+  position:fixed;bottom:2.2rem;right:2.2rem;z-index:150;
+  width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--rose),var(--dusty));
+  color:white;font-size:1.6rem;line-height:1;
+  box-shadow:0 6px 24px rgba(196,154,154,0.45);
+  transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.25s;
+  display:none;align-items:center;justify-content:center;
+}
+.fab.visible{display:flex}
+.fab:hover{transform:scale(1.1);box-shadow:0 10px 32px rgba(196,154,154,0.55)}
+.fab.open{transform:rotate(45deg)}
+
+/* ── DRAWER ── */
+.drawer-overlay{
+  position:fixed;inset:0;background:rgba(50,30,30,0.35);
+  backdrop-filter:blur(4px);z-index:160;
+  opacity:0;pointer-events:none;transition:opacity 0.35s;
+}
+.drawer-overlay.open{opacity:1;pointer-events:all}
+.drawer{
+  position:fixed;bottom:0;left:0;right:0;z-index:170;
+  background:var(--cream);border-radius:28px 28px 0 0;
+  box-shadow:0 -8px 40px rgba(140,80,80,0.14);
+  transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);
+  max-height:88vh;overflow-y:auto;
+}
+.drawer.open{transform:translateY(0)}
+.drawer-handle{width:40px;height:4px;background:rgba(212,165,165,0.4);border-radius:2px;margin:1rem auto 0}
+.drawer-header{
+  padding:1.2rem 2rem 1rem;display:flex;justify-content:space-between;align-items:center;
+  border-bottom:1px solid rgba(212,165,165,0.15);
+  position:sticky;top:0;background:var(--cream);z-index:1;
+}
+.drawer-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300}
+.drawer-close{background:none;border:none;font-size:1.3rem;color:var(--text-light);cursor:pointer;padding:0.2rem;transition:color 0.2s}
+.drawer-close:hover{color:var(--text)}
+.drawer-body{padding:1.5rem 2rem 1rem}
+@media(min-width:700px){
+  .drawer{left:50%;right:auto;width:580px;transform:translateX(-50%) translateY(100%);border-radius:28px 28px 0 0}
+  .drawer.open{transform:translateX(-50%) translateY(0)}
+}
+
+/* ── FORM ── */
+.form-group{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1.2rem}
+label{font-size:0.68rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--text-light)}
+input,textarea,select{
+  font-family:'Jost',sans-serif;font-size:0.9rem;
+  background:#fdfafa;border:1px solid rgba(212,165,165,0.3);
+  border-radius:12px;padding:0.8rem 1.1rem;color:var(--text);
+  transition:border-color 0.2s;outline:none;width:100%;
+}
+input:focus,textarea:focus,select:focus{border-color:var(--rose);background:white}
+textarea{resize:vertical;min-height:120px}
+.form-row{display:flex;gap:1rem;flex-wrap:wrap}
+.form-row .form-group{flex:1;min-width:130px}
+.form-actions{display:flex;gap:0.75rem;justify-content:flex-end;margin-top:0.75rem}
+
+/* ── BUTTONS ── */
+.btn{font-family:'Jost',sans-serif;font-size:0.75rem;letter-spacing:0.18em;text-transform:uppercase;padding:0.8rem 1.8rem;border-radius:50px;border:none;cursor:pointer;transition:all 0.25s}
+.btn-primary{background:linear-gradient(135deg,var(--rose),var(--dusty));color:white;box-shadow:0 4px 16px rgba(196,154,154,0.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(196,154,154,0.4)}
+.btn-ghost{background:transparent;color:var(--text-mid);border:1px solid rgba(212,165,165,0.35)}
+.btn-ghost:hover{background:var(--blush)}
+.btn-sm{font-size:0.68rem;padding:0.45rem 1rem}
+.btn-danger{background:transparent;color:#b07070;border:1px solid rgba(180,112,112,0.25)}
+.btn-danger:hover{background:#fff0f0}
+
+/* ── UPLOAD ── */
+.upload-area{
+  border:2px dashed rgba(212,165,165,0.35);border-radius:12px;
+  padding:1.4rem;text-align:center;cursor:pointer;
+  transition:border-color 0.2s,background 0.2s;font-size:0.8rem;color:var(--text-light);
+}
+.upload-area:hover{border-color:var(--rose);background:rgba(212,165,165,0.04)}
+.upload-area input{display:none}
+.upload-preview{font-size:0.75rem;color:var(--dusty);margin-top:0.4rem}
+
+/* ── LETTERS ── */
+.letters-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;margin-bottom:3rem}
+.letter-card{background:var(--white);border-radius:20px;border:1px solid rgba(212,165,165,0.18);box-shadow:0 4px 20px rgba(180,130,130,0.07);overflow:hidden}
+.letter-card-top{
+  background:linear-gradient(135deg,#fdf0f0,#f8f0fa);
+  padding:1.3rem 1.8rem 1rem;
+  border-bottom:1px solid rgba(212,165,165,0.12);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.letter-from{font-size:0.68rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--dusty)}
+.letter-stamp{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--dusty));display:flex;align-items:center;justify-content:center;font-size:1rem}
+.letter-body{padding:1.5rem 1.8rem}
+.letter-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;line-height:1.85;color:var(--text);white-space:pre-wrap;max-height:160px;overflow:hidden;position:relative}
+.letter-text.expanded{max-height:none}
+.letter-fade{position:absolute;bottom:0;left:0;right:0;height:50px;background:linear-gradient(transparent,white)}
+.letter-footer{padding:0.75rem 1.8rem 1.2rem;display:flex;justify-content:space-between;align-items:center}
+.letter-date-str{font-size:0.68rem;color:var(--text-light)}
+.letter-actions-row{display:flex;gap:0.5rem}
+
+/* ── MEMORIES ── */
+.album-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.2rem;margin-bottom:3rem}
+.mem-card{aspect-ratio:3/4;border-radius:18px;cursor:pointer;perspective:1200px;position:relative}
+.mem-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform 0.7s cubic-bezier(0.4,0,0.2,1)}
+.mem-card.flipped .mem-inner{transform:rotateY(180deg)}
+.mem-front,.mem-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:18px;border:1px solid rgba(212,165,165,0.15);box-shadow:0 6px 24px rgba(180,130,130,0.1);overflow:hidden}
+.mem-front{background:var(--white);display:flex;flex-direction:column}
+.mem-front img{width:100%;flex:1;object-fit:cover}
+.mem-text-only{width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:1.5rem;font-family:'Cormorant Garamond',serif;font-size:1.05rem;line-height:1.6;text-align:center;color:var(--text);background:linear-gradient(135deg,#fff8f8,#f8f4ff)}
+.mem-caption-strip{padding:0.6rem 0.9rem;font-size:0.73rem;color:var(--text-light);border-top:1px solid rgba(212,165,165,0.12);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mem-date-badge{position:absolute;top:0.6rem;right:0.6rem;background:rgba(255,255,255,0.88);backdrop-filter:blur(6px);border-radius:8px;padding:0.2rem 0.55rem;font-size:0.62rem;color:var(--text-light)}
+.mem-back{transform:rotateY(180deg);background:linear-gradient(135deg,#fef0f0,#f5f0ff);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;gap:1rem;text-align:center}
+.mem-back-text{font-family:'Cormorant Garamond',serif;font-size:1rem;line-height:1.65;color:var(--text)}
+.mem-back-date{font-size:0.68rem;letter-spacing:0.15em;color:var(--text-light);text-transform:uppercase}
+.mem-back-actions{display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:center}
+
+/* fullscreen */
+#fullscreen-viewer{position:fixed;inset:0;background:rgba(25,16,16,0.93);z-index:300;display:none;align-items:center;justify-content:center}
+#fullscreen-viewer.open{display:flex}
+#fullscreen-img{max-width:90vw;max-height:88vh;border-radius:12px;object-fit:contain}
+.fs-close{position:absolute;top:1.5rem;right:1.8rem;background:none;border:none;color:rgba(255,255,255,0.7);font-size:1.8rem;cursor:pointer;transition:color 0.2s}
+.fs-close:hover{color:white}
+
+/* ── BUCKET ROADMAP ── */
+.roadmap-wrap{position:relative;max-width:680px;margin:0 auto 4rem}
+.road-path{position:absolute;left:50%;top:20px;bottom:20px;width:3px;background:linear-gradient(to bottom,var(--blush),var(--lavender),var(--sage));transform:translateX(-50%);border-radius:2px;z-index:0}
+.roadmap-stops{position:relative;z-index:1;display:flex;flex-direction:column}
+.road-stop{display:flex;align-items:flex-start;gap:1.5rem;padding:1.2rem 0;position:relative}
+.road-stop:nth-child(odd){flex-direction:row;padding-right:calc(50% + 2rem);justify-content:flex-end}
+.road-stop:nth-child(even){flex-direction:row;padding-left:calc(50% + 2rem);justify-content:flex-start}
+.stop-node{
+  position:absolute;left:50%;top:1.8rem;transform:translateX(-50%);
+  width:42px;height:42px;border-radius:50%;
+  border:2.5px solid var(--rose);background:var(--cream);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;cursor:pointer;transition:background 0.3s,border-color 0.3s;
+  z-index:2;flex-shrink:0;
+}
+.stop-node.done{background:var(--rose);border-color:var(--dusty)}
+.stop-node.done::after{content:'✓';color:white;font-size:0.85rem;font-weight:bold;font-family:'Jost',sans-serif}
+.stop-card{
+  background:var(--white);border-radius:16px;
+  padding:1.2rem 1.4rem;border:1px solid rgba(212,165,165,0.18);
+  box-shadow:0 4px 16px rgba(180,130,130,0.07);
+  transition:box-shadow 0.2s;max-width:260px;width:100%;
+}
+.stop-card:hover{box-shadow:0 8px 28px rgba(180,130,130,0.13)}
+.stop-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;margin-bottom:0.3rem}
+.stop-title.done-text{text-decoration:line-through;color:var(--text-light)}
+.stop-desc{font-size:0.78rem;color:var(--text-light);line-height:1.55;margin-bottom:0.4rem}
+.stop-links{display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:0.4rem}
+.stop-link{font-size:0.68rem;color:var(--dusty);text-decoration:none;border:1px solid rgba(212,165,165,0.28);border-radius:20px;padding:0.18rem 0.6rem;transition:background 0.2s}
+.stop-link:hover{background:var(--blush)}
+.stop-actions{display:flex;gap:0.4rem;justify-content:flex-end;margin-top:0.5rem}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--cream);padding:0.7rem 1.5rem;border-radius:50px;font-size:0.78rem;letter-spacing:0.08em;opacity:0;transition:all 0.3s;z-index:500;pointer-events:none;white-space:nowrap}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── LOADING / EMPTY ── */
+.loading-dots{display:flex;justify-content:center;gap:0.4rem;padding:2.5rem}
+.loading-dots span{width:7px;height:7px;background:var(--rose);border-radius:50%;animation:bounce 1.2s infinite}
+.loading-dots span:nth-child(2){animation-delay:0.2s}
+.loading-dots span:nth-child(3){animation-delay:0.4s}
+@keyframes bounce{0%,80%,100%{transform:translateY(0);opacity:0.5}40%{transform:translateY(-8px);opacity:1}}
+.empty-state{text-align:center;padding:3rem;font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--text-light);font-size:1.15rem}
+
+footer{text-align:center;padding:3rem 1rem;font-size:0.7rem;letter-spacing:0.18em;color:var(--text-light);border-top:1px solid rgba(212,165,165,0.12)}
+
+@media(max-width:640px){
+  .nav-cards{flex-direction:column;align-items:center}
+  .nav-card{max-width:100%;width:100%}
+  .album-grid{grid-template-columns:repeat(2,1fr)}
+  .road-path{left:20px;transform:none}
+  .road-stop:nth-child(odd),.road-stop:nth-child(even){flex-direction:column;padding:1rem 0 1rem 3.5rem;justify-content:flex-start}
+  .stop-node{left:0;top:1.4rem;transform:none}
+  .stop-card{max-width:100%}
+}
+</style>
+</head>
+<body>
+
+<button class="back-btn" id="back-btn" onclick="goHome()">
+  <span class="back-arrow">←</span><span>back</span>
+</button>
+
+<!-- ══════════════════════
+     HOME
+══════════════════════ -->
+<div class="page" id="page-home">
+
+  <section id="hero">
+    <div id="flower-container">
+      <svg id="hero-flower" viewBox="0 0 260 360" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="hg1" cx="45%" cy="60%" r="58%"><stop offset="0%" stop-color="#fce0df"/><stop offset="100%" stop-color="#e89090"/></radialGradient>
+          <radialGradient id="hg2" cx="45%" cy="60%" r="58%"><stop offset="0%" stop-color="#f9d0d0"/><stop offset="100%" stop-color="#e07878"/></radialGradient>
+          <radialGradient id="hg3" cx="45%" cy="60%" r="58%"><stop offset="0%" stop-color="#fdeaea"/><stop offset="100%" stop-color="#eea0a0"/></radialGradient>
+          <radialGradient id="hgc" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fef2c0"/><stop offset="100%" stop-color="#f0c050"/></radialGradient>
+        </defs>
+        <path d="M130 340 Q127 290 130 240" stroke="#8faa82" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <path d="M129 295 Q100 278 96 260 Q113 268 129 283" fill="#7a9e6e" opacity="0.9"/>
+        <path d="M131 312 Q160 293 165 274 Q148 283 131 300" fill="#7a9e6e" opacity="0.85"/>
+        <ellipse cx="130" cy="196" rx="18" ry="36" fill="url(#hg1)" transform="rotate(-55 130 232)" opacity="0.7"/>
+        <ellipse cx="130" cy="196" rx="18" ry="36" fill="url(#hg1)" transform="rotate(-28 130 232)" opacity="0.75"/>
+        <ellipse cx="130" cy="196" rx="18" ry="36" fill="url(#hg1)" transform="rotate(0 130 232)" opacity="0.78"/>
+        <ellipse cx="130" cy="196" rx="18" ry="36" fill="url(#hg1)" transform="rotate(28 130 232)" opacity="0.75"/>
+        <ellipse cx="130" cy="196" rx="18" ry="36" fill="url(#hg1)" transform="rotate(55 130 232)" opacity="0.7"/>
+        <ellipse cx="130" cy="202" rx="14" ry="29" fill="url(#hg2)" transform="rotate(-42 130 230)" opacity="0.88"/>
+        <ellipse cx="130" cy="202" rx="14" ry="29" fill="url(#hg2)" transform="rotate(-14 130 230)"/>
+        <ellipse cx="130" cy="202" rx="14" ry="29" fill="url(#hg2)" transform="rotate(14 130 230)"/>
+        <ellipse cx="130" cy="202" rx="14" ry="29" fill="url(#hg2)" transform="rotate(42 130 230)" opacity="0.88"/>
+        <ellipse cx="130" cy="208" rx="10" ry="21" fill="url(#hg3)" transform="rotate(-26 130 228)"/>
+        <ellipse cx="130" cy="208" rx="10" ry="21" fill="url(#hg3)" transform="rotate(0 130 228)"/>
+        <ellipse cx="130" cy="208" rx="10" ry="21" fill="url(#hg3)" transform="rotate(26 130 228)"/>
+        <circle cx="130" cy="228" r="13" fill="url(#hgc)"/>
+        <circle cx="126" cy="224" r="2.5" fill="#c89020" opacity="0.85"/>
+        <circle cx="134" cy="223" r="2" fill="#c89020" opacity="0.85"/>
+        <circle cx="130" cy="221" r="2" fill="#c89020" opacity="0.85"/>
+        <circle cx="128" cy="229" r="1.8" fill="#a07010" opacity="0.6"/>
+        <circle cx="133" cy="228" r="1.8" fill="#a07010" opacity="0.6"/>
+      </svg>
+    </div>
+    <h1 class="hero-monogram">A &amp; S</h1>
+    <p class="hero-tagline">our little world</p>
+    <div class="scroll-cue"><div class="scroll-line"></div><span>scroll</span></div>
+  </section>
+
+  <section id="flower-grow">
+    <div class="sticky-wrap">
+      <div class="grow-scene">
+        <svg id="grow-svg" viewBox="0 0 340 500" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="gA" cx="42%" cy="62%" r="60%"><stop offset="0%" stop-color="#fce0df"/><stop offset="100%" stop-color="#e89090"/></radialGradient>
+            <radialGradient id="gB" cx="42%" cy="62%" r="60%"><stop offset="0%" stop-color="#f9cccc"/><stop offset="100%" stop-color="#e07878"/></radialGradient>
+            <radialGradient id="gC" cx="42%" cy="62%" r="60%"><stop offset="0%" stop-color="#fdeaea"/><stop offset="100%" stop-color="#eeaaaa"/></radialGradient>
+            <radialGradient id="gCtr" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fef2c0"/><stop offset="100%" stop-color="#f0c050"/></radialGradient>
+          </defs>
+
+          <!-- STEM -->
+          <path id="s-stem"
+            d="M170 480 Q166 430 168 370 Q169 345 170 320"
+            stroke="#8faa82" stroke-width="5" fill="none" stroke-linecap="round"
+            stroke-dasharray="175" stroke-dashoffset="175"/>
+
+          <!-- SEPAL -->
+          <g id="s-sepal" opacity="0">
+            <path d="M160 348 Q153 330 160 316" stroke="#7a9e6e" stroke-width="2.2" fill="none" opacity="0.75"/>
+            <path d="M180 348 Q187 330 180 316" stroke="#7a9e6e" stroke-width="2.2" fill="none" opacity="0.75"/>
+            <path d="M170 350 Q162 335 164 318" stroke="#7a9e6e" stroke-width="1.5" fill="none" opacity="0.5"/>
+            <path d="M170 350 Q178 335 176 318" stroke="#7a9e6e" stroke-width="1.5" fill="none" opacity="0.5"/>
+          </g>
+
+          <!-- LEAF LEFT -->
+          <g id="s-ll" opacity="0">
+            <path d="M168 405 Q128 380 120 358 Q144 367 168 388" fill="#7a9e6e"/>
+            <path d="M168 405 Q134 376 126 352" stroke="#5a8050" stroke-width="1.2" fill="none" opacity="0.45"/>
+          </g>
+
+          <!-- LEAF RIGHT -->
+          <g id="s-lr" opacity="0">
+            <path d="M172 425 Q212 398 220 374 Q196 385 172 408" fill="#7a9e6e"/>
+            <path d="M172 425 Q206 394 214 370" stroke="#5a8050" stroke-width="1.2" fill="none" opacity="0.45"/>
+          </g>
+
+          <!-- OUTER PETALS — 6 individual, staggered -->
+          <g id="g-op1" opacity="0"><ellipse cx="170" cy="274" rx="21" ry="46" fill="url(#gA)" transform="rotate(-60 170 322)" opacity="0.68"/></g>
+          <g id="g-op2" opacity="0"><ellipse cx="170" cy="274" rx="21" ry="46" fill="url(#gA)" transform="rotate(-36 170 322)" opacity="0.72"/></g>
+          <g id="g-op3" opacity="0"><ellipse cx="170" cy="274" rx="21" ry="46" fill="url(#gA)" transform="rotate(-12 170 322)" opacity="0.76"/></g>
+          <g id="g-op4" opacity="0"><ellipse cx="170" cy="274" rx="21" ry="46" fill="url(#gA)" transform="rotate(12 170 322)" opacity="0.76"/></g>
+          <g id="g-op5" opacity="0"><ellipse cx="170" cy="274" rx="21" ry="46" fill="url(#gA)" transform="rotate(36 170 322)" opacity="0.72"/></g>
+          <g id="g-op6" opacity="0"><ellipse cx="170" cy="274" rx="21" ry="46" fill="url(#gA)" transform="rotate(60 170 322)" opacity="0.68"/></g>
+
+          <!-- MID PETALS — 5 -->
+          <g id="g-mp1" opacity="0"><ellipse cx="170" cy="283" rx="16" ry="36" fill="url(#gB)" transform="rotate(-50 170 320)"/></g>
+          <g id="g-mp2" opacity="0"><ellipse cx="170" cy="283" rx="16" ry="36" fill="url(#gB)" transform="rotate(-22 170 320)"/></g>
+          <g id="g-mp3" opacity="0"><ellipse cx="170" cy="283" rx="16" ry="36" fill="url(#gB)" transform="rotate(6 170 320)"/></g>
+          <g id="g-mp4" opacity="0"><ellipse cx="170" cy="283" rx="16" ry="36" fill="url(#gB)" transform="rotate(34 170 320)"/></g>
+          <g id="g-mp5" opacity="0"><ellipse cx="170" cy="283" rx="16" ry="36" fill="url(#gB)" transform="rotate(62 170 320)"/></g>
+
+          <!-- INNER PETALS — 4 -->
+          <g id="g-ip1" opacity="0"><ellipse cx="170" cy="293" rx="11" ry="25" fill="url(#gC)" transform="rotate(-38 170 318)"/></g>
+          <g id="g-ip2" opacity="0"><ellipse cx="170" cy="293" rx="11" ry="25" fill="url(#gC)" transform="rotate(-10 170 318)"/></g>
+          <g id="g-ip3" opacity="0"><ellipse cx="170" cy="293" rx="11" ry="25" fill="url(#gC)" transform="rotate(18 170 318)"/></g>
+          <g id="g-ip4" opacity="0"><ellipse cx="170" cy="293" rx="11" ry="25" fill="url(#gC)" transform="rotate(46 170 318)"/></g>
+
+          <!-- CENTER -->
+          <g id="g-ctr" opacity="0">
+            <circle cx="170" cy="318" r="19" fill="url(#gCtr)"/>
+            <circle cx="164" cy="313" r="3.2" fill="#c89010" opacity="0.9"/>
+            <circle cx="176" cy="313" r="2.8" fill="#c89010" opacity="0.9"/>
+            <circle cx="170" cy="310" r="2.8" fill="#c89010" opacity="0.9"/>
+            <circle cx="162" cy="320" r="2.2" fill="#a07010" opacity="0.65"/>
+            <circle cx="172" cy="322" r="2.2" fill="#a07010" opacity="0.65"/>
+            <circle cx="178" cy="318" r="2.2" fill="#a07010" opacity="0.65"/>
+            <circle cx="166" cy="324" r="1.8" fill="#a07010" opacity="0.5"/>
+          </g>
+
+          <!-- SIDE BRANCH + BUD -->
+          <path id="g-branch"
+            d="M168 372 Q196 352 216 336"
+            stroke="#8faa82" stroke-width="3.5" fill="none" stroke-linecap="round"
+            stroke-dasharray="60" stroke-dashoffset="60" opacity="0"/>
+          <g id="g-bud" opacity="0">
+            <ellipse cx="216" cy="316" rx="9" ry="20" fill="url(#gC)" transform="rotate(-18 216 336)" opacity="0.78"/>
+            <ellipse cx="216" cy="316" rx="9" ry="20" fill="url(#gB)" transform="rotate(2 216 336)" opacity="0.85"/>
+            <ellipse cx="216" cy="316" rx="9" ry="20" fill="url(#gC)" transform="rotate(22 216 336)" opacity="0.72"/>
+            <circle cx="216" cy="330" r="7" fill="url(#gCtr)"/>
+            <circle cx="213" cy="327" r="2" fill="#c89010" opacity="0.8"/>
+            <circle cx="219" cy="327" r="1.8" fill="#c89010" opacity="0.8"/>
+          </g>
+        </svg>
+        <div class="bloom-label" id="bloom-label">blooming for you</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="home-nav">
+    <p class="nav-eyebrow">our space</p>
+    <h2 class="nav-heading">what would you like to open?</h2>
+    <div class="nav-cards">
+      <div class="nav-card" onclick="goTo('letters')">
+        <div class="card-icon">✉️</div>
+        <div class="card-title">Letters</div>
+        <div class="card-desc">words we mean to keep forever</div>
+      </div>
+      <div class="nav-card" onclick="goTo('memories')">
+        <div class="card-icon">🎞</div>
+        <div class="card-title">Memories</div>
+        <div class="card-desc">moments we never want to forget</div>
+      </div>
+      <div class="nav-card" onclick="goTo('bucket')">
+        <div class="card-icon">🌿</div>
+        <div class="card-title">Bucket List</div>
+        <div class="card-desc">everything we want to do together</div>
+      </div>
+    </div>
+  </section>
+  <footer>made with love · A &amp; S</footer>
+</div>
+
+<!-- ══════════════════════
+     LETTERS
+══════════════════════ -->
+<div class="page hidden" id="page-letters">
+  <div class="page-hero">
+    <h1 class="page-hero-title">Letters</h1>
+    <p class="page-hero-sub">words we mean to keep forever</p>
+  </div>
+  <div class="page-content">
+    <div id="letters-grid" class="letters-grid">
+      <div class="loading-dots"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════
+     MEMORIES
+══════════════════════ -->
+<div class="page hidden" id="page-memories">
+  <div class="page-hero">
+    <h1 class="page-hero-title">Memories</h1>
+    <p class="page-hero-sub">moments we never want to forget</p>
+  </div>
+  <div class="page-content">
+    <div id="album-grid" class="album-grid">
+      <div class="loading-dots"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+</div>
+
+<div id="fullscreen-viewer" onclick="closeFullscreen()">
+  <button class="fs-close">✕</button>
+  <img id="fullscreen-img" src="" alt="">
+</div>
+
+<!-- ══════════════════════
+     BUCKET LIST
+══════════════════════ -->
+<div class="page hidden" id="page-bucket">
+  <div class="page-hero">
+    <h1 class="page-hero-title">Bucket List</h1>
+    <p class="page-hero-sub">everything we want to do together</p>
+  </div>
+  <div class="page-content">
+    <div class="roadmap-wrap">
+      <div class="road-path" id="road-path"></div>
+      <div class="roadmap-stops" id="roadmap-stops">
+        <div class="loading-dots"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════
+     FAB + DRAWER OVERLAY
+══════════════════════ -->
+<button class="fab" id="fab" onclick="openDrawer()">+</button>
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+
+<!-- LETTER DRAWER -->
+<div class="drawer" id="drawer-letters">
+  <div class="drawer-handle"></div>
+  <div class="drawer-header">
+    <span class="drawer-title">Write a letter</span>
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-body">
+    <div class="form-group" style="max-width:180px">
+      <label>from</label>
+      <select id="letter-author"><option value="A">A</option><option value="S">S</option></select>
+    </div>
+    <div class="form-group">
+      <label>your words</label>
+      <textarea id="letter-content" placeholder="write anything you want her to read…"></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeDrawer()">cancel</button>
+      <button class="btn btn-primary" onclick="submitLetter()">send letter</button>
+    </div>
+  </div>
+</div>
+
+<!-- MEMORY DRAWER -->
+<div class="drawer" id="drawer-memories">
+  <div class="drawer-handle"></div>
+  <div class="drawer-header">
+    <span class="drawer-title">Add a memory</span>
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-body">
+    <div class="form-row">
+      <div class="form-group">
+        <label>type</label>
+        <select id="mem-type" onchange="toggleMemType()">
+          <option value="photo">photo only</option>
+          <option value="photo-text">photo + message (flip to read)</option>
+          <option value="text">text only</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>date of memory</label>
+        <input type="date" id="mem-date">
+      </div>
+    </div>
+    <div id="mem-photo-area" class="form-group">
+      <label>photo</label>
+      <div class="upload-area" onclick="document.getElementById('mem-photo-input').click()">
+        <input type="file" id="mem-photo-input" accept="image/*" onchange="previewFile(this,'mem-photo-prev')">
+        tap to choose a photo
+        <div class="upload-preview" id="mem-photo-prev"></div>
+      </div>
+    </div>
+    <div id="mem-caption-area" class="form-group">
+      <label>caption / message</label>
+      <textarea id="mem-caption" placeholder="a little note about this moment…" style="min-height:80px"></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeDrawer()">cancel</button>
+      <button class="btn btn-primary" onclick="submitMemory()">save memory</button>
+    </div>
+  </div>
+</div>
+
+<!-- BUCKET DRAWER -->
+<div class="drawer" id="drawer-bucket">
+  <div class="drawer-handle"></div>
+  <div class="drawer-header">
+    <span class="drawer-title">Add to the journey</span>
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-body">
+    <div class="form-group">
+      <label>dream / goal</label>
+      <input type="text" id="bucket-title" placeholder="e.g. watch the sunrise in Santorini">
+    </div>
+    <div class="form-group">
+      <label>details (optional)</label>
+      <textarea id="bucket-desc" placeholder="notes, ideas, anything…" style="min-height:70px"></textarea>
+    </div>
+    <div class="form-group">
+      <label>link (optional)</label>
+      <input type="url" id="bucket-link" placeholder="https://…">
+    </div>
+    <div class="form-group">
+      <label>attach a file or photo (optional)</label>
+      <div class="upload-area" onclick="document.getElementById('bucket-file-input').click()">
+        <input type="file" id="bucket-file-input" onchange="previewFile(this,'bucket-file-prev')">
+        tap to attach
+        <div class="upload-preview" id="bucket-file-prev"></div>
+      </div>
+    </div>
+    <div class="form-actions" style="padding-bottom:1rem">
+      <button class="btn btn-ghost" onclick="closeDrawer()">cancel</button>
+      <button class="btn btn-primary" onclick="submitBucket()">add to journey</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const SUPA_URL='https://fphlwxaeeyniqzizjzms.supabase.co';
+const SUPA_KEY='sb_publishable_ZWvrbu8aTjcLbyY-Re7U-g_44lRBSj6';
+const H={
+  'apikey':SUPA_KEY,
+  'Authorization':'Bearer '+SUPA_KEY,
+  'Content-Type':'application/json',
+  'Prefer':'return=representation'
+};
+
+async function supa(path,opts){
+  opts=opts||{};
+  const r=await fetch(SUPA_URL+'/rest/v1/'+path,{headers:Object.assign({},H,opts.headers||{}),method:opts.method||'GET',body:opts.body});
+  if(!r.ok){const e=await r.json().catch(function(){return{};});throw new Error(e.message||r.statusText);}
+  const t=await r.text();return t?JSON.parse(t):null;
+}
+
+async function uploadToStorage(path,file){
+  var ct=file.type||'application/octet-stream';
+  var safePath=path.split('/').map(function(seg){return encodeURIComponent(seg);}).join('/');
+  var r=await fetch(SUPA_URL+'/storage/v1/object/uploads/'+safePath,{
+    method:'POST',
+    headers:{
+      'apikey':SUPA_KEY,
+      'Authorization':'Bearer '+SUPA_KEY,
+      'Content-Type':ct,
+      'x-upsert':'true',
+      'Cache-Control':'3600'
+    },
+    body:file
+  });
+  if(!r.ok){
+    var errMsg=await r.text().catch(function(){return r.status+' '+r.statusText;});
+    throw new Error(errMsg);
+  }
+  return SUPA_URL+'/storage/v1/object/public/uploads/'+path;
+}
+
+function sanitizeName(name){
+  return name.replace(/[^a-zA-Z0-9.\-_]/g,'_');
+}
+
+function toast(msg,dur){
+  dur=dur||2800;
+  var el=document.getElementById('toast');
+  el.textContent=msg;el.classList.add('show');
+  setTimeout(function(){el.classList.remove('show');},dur);
+}
+
+function esc(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/\n/g,'<br>');
+}
+
+function previewFile(input,id){
+  document.getElementById(id).textContent=input.files[0]?input.files[0].name:'';
+}
+
+/* ── NAVIGATION ── */
+var currentPage='home';
+function goTo(page){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.add('hidden');});
+  var t=document.getElementById('page-'+page);
+  t.classList.remove('hidden');
+  t.scrollTop=0;
+  document.getElementById('back-btn').classList.add('visible');
+  document.getElementById('fab').classList.add('visible');
+  currentPage=page;
+  if(page==='letters')loadLetters();
+  if(page==='memories')loadMemories();
+  if(page==='bucket')loadBucket();
+}
+function goHome(){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.add('hidden');});
+  document.getElementById('page-home').classList.remove('hidden');
+  document.getElementById('back-btn').classList.remove('visible');
+  document.getElementById('fab').classList.remove('visible');
+  closeDrawer();
+  currentPage='home';
+}
+
+/* ── DRAWER ── */
+var activeDrawer=null;
+function openDrawer(){
+  if(!currentPage||currentPage==='home')return;
+  activeDrawer=document.getElementById('drawer-'+currentPage);
+  if(!activeDrawer)return;
+  document.getElementById('drawer-overlay').classList.add('open');
+  activeDrawer.classList.add('open');
+  document.getElementById('fab').classList.add('open');
+}
+function closeDrawer(){
+  document.getElementById('drawer-overlay').classList.remove('open');
+  document.querySelectorAll('.drawer').forEach(function(d){d.classList.remove('open');});
+  document.getElementById('fab').classList.remove('open');
+  activeDrawer=null;
+}
+
+/* ── SCROLL BLOOM ── */
+(function(){
+  var section=document.getElementById('flower-grow');
+  var stem=document.getElementById('s-stem');
+  var sepal=document.getElementById('s-sepal');
+  var ll=document.getElementById('s-ll');
+  var lr=document.getElementById('s-lr');
+  var ops=['g-op1','g-op2','g-op3','g-op4','g-op5','g-op6'].map(function(id){return document.getElementById(id);});
+  var mps=['g-mp1','g-mp2','g-mp3','g-mp4','g-mp5'].map(function(id){return document.getElementById(id);});
+  var ips=['g-ip1','g-ip2','g-ip3','g-ip4'].map(function(id){return document.getElementById(id);});
+  var ctr=document.getElementById('g-ctr');
+  var branch=document.getElementById('g-branch');
+  var bud=document.getElementById('g-bud');
+  var label=document.getElementById('bloom-label');
+
+  function c(v){return Math.max(0,Math.min(1,v));}
+  function ease(t){return t<0.5?2*t*t:-1+(4-2*t)*t;}
+  function lerp(a,b,t){return a+(b-a)*t;}
+
+  function scaleEl(el,s,ox,oy){
+    el.style.transformOrigin=ox+'px '+oy+'px';
+    el.style.transform='scale('+s+')';
+  }
+
+  var homePage=document.getElementById('page-home');
+  homePage.addEventListener('scroll',function(){
+    var scrollTop=homePage.scrollTop;
+    var sectionTop=section.offsetTop;
+    var total=section.offsetHeight-homePage.clientHeight;
+    var p=c((scrollTop-sectionTop)/total);
+
+    /* stem grows 0→0.15 */
+    stem.style.strokeDashoffset=lerp(175,0,ease(c(p/0.15)));
+
+    /* leaves 0.14→0.26 */
+    ll.style.opacity=ease(c((p-0.14)/0.1));
+    lr.style.opacity=ease(c((p-0.18)/0.1));
+
+    /* sepal 0.22→0.30 */
+    sepal.style.opacity=ease(c((p-0.22)/0.1));
+
+    /* outer petals — 6, each 0.28 + i*0.05 */
+    ops.forEach(function(el,i){
+      var t=ease(c((p-(0.28+i*0.05))/0.1));
+      el.style.opacity=t;
+      scaleEl(el,lerp(0.2,1,t),170,322);
+    });
+
+    /* mid petals 0.60 + i*0.04 */
+    mps.forEach(function(el,i){
+      var t=ease(c((p-(0.60+i*0.04))/0.09));
+      el.style.opacity=t;
+      scaleEl(el,lerp(0.15,1,t),170,320);
+    });
+
+    /* inner petals 0.78 + i*0.03 */
+    ips.forEach(function(el,i){
+      var t=ease(c((p-(0.78+i*0.03))/0.08));
+      el.style.opacity=t;
+      scaleEl(el,lerp(0.1,1,t),170,318);
+    });
+
+    /* center 0.88 */
+    var tc=ease(c((p-0.88)/0.07));
+    ctr.style.opacity=tc;
+    scaleEl(ctr,lerp(0.1,1,tc),170,318);
+
+    /* side branch 0.72 */
+    var tb=ease(c((p-0.72)/0.1));
+    branch.style.opacity=tb>0?1:0;
+    branch.style.strokeDashoffset=lerp(60,0,tb);
+
+    /* bud 0.80 */
+    var tbu=ease(c((p-0.80)/0.1));
+    bud.style.opacity=tbu;
+    scaleEl(bud,lerp(0.2,1,tbu),216,330);
+
+    /* label 0.93 */
+    label.style.opacity=ease(c((p-0.93)/0.06));
+  });
+})();
+
+/* ── LETTERS ── */
+async function loadLetters(){
+  var el=document.getElementById('letters-grid');
+  el.innerHTML='<div class="loading-dots"><span></span><span></span><span></span></div>';
+  try{
+    var data=await supa('letters?order=created_at.desc&select=*');
+    if(!data.length){el.innerHTML='<div class="empty-state">no letters yet — be the first to write one</div>';return;}
+    el.innerHTML=data.map(function(l){return buildLetter(l);}).join('');
+  }catch(e){el.innerHTML='<div class="empty-state">could not load letters</div>';}
+}
+function buildLetter(l){
+  var d=new Date(l.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  return '<div class="letter-card" id="lc-'+l.id+'">'+
+    '<div class="letter-card-top">'+
+      '<span class="letter-from">from '+esc(l.author)+'</span>'+
+      '<div class="letter-stamp">'+(l.author==='A'?'💌':'🌸')+'</div>'+
+    '</div>'+
+    '<div class="letter-body">'+
+      '<div class="letter-text" id="lt-'+l.id+'">'+esc(l.content)+'<div class="letter-fade" id="lf-'+l.id+'"></div></div>'+
+    '</div>'+
+    '<div class="letter-footer">'+
+      '<span class="letter-date-str">'+d+'</span>'+
+      '<div class="letter-actions-row">'+
+        '<button class="btn btn-ghost btn-sm" onclick="expandLetter(\''+l.id+'\')">read more</button>'+
+        '<button class="btn btn-danger btn-sm" onclick="deleteLetter(\''+l.id+'\')">delete</button>'+
+      '</div>'+
+    '</div>'+
+  '</div>';
+}
+function expandLetter(id){
+  var el=document.getElementById('lt-'+id);
+  var fade=document.getElementById('lf-'+id);
+  el.classList.toggle('expanded');
+  if(fade)fade.style.display=el.classList.contains('expanded')?'none':'block';
+}
+async function submitLetter(){
+  var author=document.getElementById('letter-author').value;
+  var content=document.getElementById('letter-content').value.trim();
+  if(!content){toast('write something first');return;}
+  try{
+    await supa('letters',{method:'POST',body:JSON.stringify({author:author,content:content})});
+    document.getElementById('letter-content').value='';
+    closeDrawer();toast('letter saved ♡');loadLetters();
+  }catch(e){toast('something went wrong');}
+}
+async function deleteLetter(id){
+  if(!confirm('delete this letter?'))return;
+  await supa('letters?id=eq.'+id,{method:'DELETE',headers:{'Prefer':''}});
+  toast('deleted');loadLetters();
+}
+
+/* ── MEMORIES ── */
+function toggleMemType(){
+  var t=document.getElementById('mem-type').value;
+  document.getElementById('mem-photo-area').style.display=t==='text'?'none':'block';
+  document.getElementById('mem-caption-area').style.display=t==='photo'?'none':'block';
+}
+toggleMemType();
+
+async function loadMemories(){
+  var el=document.getElementById('album-grid');
+  el.innerHTML='<div class="loading-dots"><span></span><span></span><span></span></div>';
+  try{
+    var data=await supa('memories?order=memory_date.desc&select=*');
+    if(!data.length){el.innerHTML='<div class="empty-state" style="grid-column:1/-1">no memories yet — add your first one</div>';return;}
+    el.innerHTML=data.map(function(m){return buildMemCard(m);}).join('');
+  }catch(e){el.innerHTML='<div class="empty-state">could not load memories</div>';}
+}
+function buildMemCard(m){
+  var date=m.memory_date?new Date(m.memory_date).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'';
+  var badge=date?'<div class="mem-date-badge">'+date+'</div>':'';
+  var front='';
+  if(m.type==='text'){
+    front='<div class="mem-text-only">'+esc(m.caption||'')+'</div>';
+  }else if(m.image_url){
+    var cap=(m.type==='photo'&&m.caption)?'<div class="mem-caption-strip">'+esc(m.caption)+'</div>':'';
+    front='<div class="mem-front"><img src="'+m.image_url+'" alt="memory" onclick="event.stopPropagation();openFullscreen(\''+m.image_url+'\')">'+badge+cap+'</div>';
+  }
+  var backInner=(m.type==='photo-text')
+    ?'<div class="mem-back-text">'+esc(m.caption||'')+'</div><div class="mem-back-date">'+date+'</div>'
+    :'<div class="mem-back-date">'+date+'</div>';
+  var back='<div class="mem-back">'+backInner+
+    '<div class="mem-back-actions">'+
+      '<button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteMemory(\''+m.id+'\')">delete</button>'+
+    '</div></div>';
+  var flip=m.type!=='text';
+  return '<div class="mem-card" id="mc-'+m.id+'"'+(flip?' onclick="this.classList.toggle(\'flipped\')"':'')+'>'+
+    '<div class="mem-inner">'+front+back+'</div></div>';
+}
+async function submitMemory(){
+  var type=document.getElementById('mem-type').value;
+  var caption=document.getElementById('mem-caption').value.trim();
+  var date=document.getElementById('mem-date').value;
+  var fileInput=document.getElementById('mem-photo-input');
+  var file=fileInput.files[0];
+  if(type!=='text'&&!file){toast('please choose a photo');return;}
+  if(type!=='photo'&&!caption){toast('please add a message');return;}
+  try{
+    var image_url=null;
+    if(file){
+      var path='memories/'+Date.now()+'-'+sanitizeName(file.name);
+      image_url=await uploadToStorage(path,file);
+    }
+    await supa('memories',{method:'POST',body:JSON.stringify({type:type,caption:caption||null,image_url:image_url,memory_date:date||null})});
+    fileInput.value='';
+    document.getElementById('mem-photo-prev').textContent='';
+    document.getElementById('mem-caption').value='';
+    document.getElementById('mem-date').value='';
+    closeDrawer();toast('memory saved ♡');loadMemories();
+  }catch(e){toast('something went wrong: '+e.message);}
+}
+async function deleteMemory(id){
+  if(!confirm('delete this memory?'))return;
+  await supa('memories?id=eq.'+id,{method:'DELETE',headers:{'Prefer':''}});
+  toast('deleted');loadMemories();
+}
+function openFullscreen(url){
+  document.getElementById('fullscreen-img').src=url;
+  document.getElementById('fullscreen-viewer').classList.add('open');
+}
+function closeFullscreen(){document.getElementById('fullscreen-viewer').classList.remove('open');}
+
+/* ── BUCKET LIST ── */
+async function loadBucket(){
+  var el=document.getElementById('roadmap-stops');
+  el.innerHTML='<div class="loading-dots"><span></span><span></span><span></span></div>';
+  try{
+    var data=await supa('bucket_list?order=created_at.asc&select=*');
+    if(!data.length){
+      el.innerHTML='<div class="empty-state">nothing on the journey yet — dream big</div>';
+      document.getElementById('road-path').style.display='none';
+      return;
+    }
+    document.getElementById('road-path').style.display='block';
+    el.innerHTML=data.map(function(b,i){return buildStop(b,i);}).join('');
+  }catch(e){el.innerHTML='<div class="empty-state">could not load list</div>';}
+}
+var stopEmojis=['🌸','🌿','✈️','🌊','🍃','⭐','🌙','🎋','🌺','🏔️','🌏','🎑','🍜','🎭','🌅'];
+function buildStop(b,i){
+  var links='';
+  if(b.link)links+='<a class="stop-link" href="'+esc(b.link)+'" target="_blank" rel="noopener">↗ link</a>';
+  if(b.file_url)links+='<a class="stop-link" href="'+esc(b.file_url)+'" target="_blank" rel="noopener">📎 file</a>';
+  var emoji=b.completed?'':stopEmojis[i%stopEmojis.length];
+  return '<div class="road-stop">'+
+    '<div class="stop-node'+(b.completed?' done':'')+'" onclick="toggleBucket(\''+b.id+'\','+b.completed+')" title="mark done">'+emoji+'</div>'+
+    '<div class="stop-card">'+
+      '<div class="stop-title'+(b.completed?' done-text':'')+'">'+esc(b.title)+'</div>'+
+      (b.description?'<div class="stop-desc">'+esc(b.description)+'</div>':'')+
+      (links?'<div class="stop-links">'+links+'</div>':'')+
+      '<div class="stop-actions"><button class="btn btn-danger btn-sm" onclick="deleteBucket(\''+b.id+'\')">remove</button></div>'+
+    '</div>'+
+  '</div>';
+}
+async function submitBucket(){
+  var title=document.getElementById('bucket-title').value.trim();
+  if(!title){toast('give it a title');return;}
+  var description=document.getElementById('bucket-desc').value.trim()||null;
+  var link=document.getElementById('bucket-link').value.trim()||null;
+  var fileInput=document.getElementById('bucket-file-input');
+  var file=fileInput.files[0];
+  try{
+    var file_url=null;
+    if(file){
+      var path='bucket/'+Date.now()+'-'+sanitizeName(file.name);
+      file_url=await uploadToStorage(path,file);
+    }
+    await supa('bucket_list',{method:'POST',body:JSON.stringify({title:title,description:description,link:link,file_url:file_url})});
+    document.getElementById('bucket-title').value='';
+    document.getElementById('bucket-desc').value='';
+    document.getElementById('bucket-link').value='';
+    fileInput.value='';
+    document.getElementById('bucket-file-prev').textContent='';
+    closeDrawer();toast('added to the journey ♡');loadBucket();
+  }catch(e){toast('something went wrong');}
+}
+async function toggleBucket(id,current){
+  await supa('bucket_list?id=eq.'+id,{method:'PATCH',body:JSON.stringify({completed:!current})});
+  loadBucket();
+}
+async function deleteBucket(id){
+  if(!confirm('remove from the journey?'))return;
+  await supa('bucket_list?id=eq.'+id,{method:'DELETE',headers:{'Prefer':''}});
+  toast('removed');loadBucket();
+}
+</script>
+</body>
+</html>
