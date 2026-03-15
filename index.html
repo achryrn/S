@@ -346,7 +346,7 @@ footer{text-align:center;padding:3rem 1rem;font-size:0.7rem;letter-spacing:0.18e
         <circle cx="133" cy="228" r="1.8" fill="#a07010" opacity="0.6"/>
       </svg>
     </div>
-    <h1 class="hero-monogram">A &amp; S</h1>
+    <h1 class="hero-monogram">Attaya &amp; Salsa</h1>
     <p class="hero-tagline">our little world</p>
     <div class="scroll-cue"><div class="scroll-line"></div><span>scroll</span></div>
   </section>
@@ -533,7 +533,7 @@ footer{text-align:center;padding:3rem 1rem;font-size:0.7rem;letter-spacing:0.18e
   <div class="drawer-body">
     <div class="form-group" style="max-width:180px">
       <label>from</label>
-      <select id="letter-author"><option value="Attaya">Attaya</option><option value="Salsa">Salsa</option></select>
+      <select id="letter-author"><option value="A">Attaya</option><option value="S">Salsa</option></select>
     </div>
     <div class="form-group">
       <label>your words</label>
@@ -815,9 +815,10 @@ async function loadLetters(){
 }
 function buildLetter(l){
   var d=new Date(l.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  var authorName=l.author==='A'?'Attaya':l.author==='S'?'Salsa':l.author;
   return '<div class="letter-card" id="lc-'+l.id+'">'+
     '<div class="letter-card-top">'+
-      '<span class="letter-from">from '+esc(l.author)+'</span>'+
+      '<span class="letter-from">from '+esc(authorName)+'</span>'+
       '<div class="letter-stamp">'+(l.author==='A'?'💌':'🌸')+'</div>'+
     '</div>'+
     '<div class="letter-body">'+
