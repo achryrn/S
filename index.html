@@ -67,6 +67,27 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);ove
   opacity:0;transform:translateY(16px);
   animation:fadeUp 1.3s ease 0.5s forwards;
 }
+
+/* ── ANNIVERSARY COUNTDOWN ── */
+.hero-countdown{
+  margin-top:1.8rem;
+  display:flex;flex-direction:column;align-items:center;gap:0.3rem;
+  opacity:0;transform:translateY(16px);
+  animation:fadeUp 1.3s ease 0.75s forwards;
+}
+.countdown-days{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.2rem,6vw,3.8rem);font-weight:300;
+  color:var(--text);line-height:1;letter-spacing:0.04em;
+}
+.countdown-label{
+  font-size:0.62rem;letter-spacing:0.35em;text-transform:uppercase;
+  color:var(--text-light);margin-top:0.1rem;
+}
+.countdown-since{
+  font-size:0.68rem;color:var(--rose);letter-spacing:0.12em;margin-top:0.15rem;
+}
+
 .scroll-cue{
   position:absolute;bottom:2.5rem;
   display:flex;flex-direction:column;align-items:center;gap:0.5rem;
@@ -83,7 +104,7 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);ove
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 
 /* ── HERO FLOWER ── */
-#flower-container{width:260px;height:360px;margin-bottom:2.5rem;opacity:1}
+#flower-container{width:260px;height:300px;margin-bottom:1.5rem;opacity:1}
 #hero-flower{width:100%;height:100%;overflow:visible}
 
 /* ── SCROLL GROW SECTION ── */
@@ -205,8 +226,25 @@ textarea{resize:vertical;min-height:120px}
 .upload-preview{font-size:0.75rem;color:var(--dusty);margin-top:0.4rem}
 
 /* ── LETTERS ── */
+.letters-section-label{
+  font-size:0.62rem;letter-spacing:0.32em;text-transform:uppercase;
+  color:var(--text-light);margin-bottom:1rem;padding-bottom:0.5rem;
+  border-bottom:1px solid rgba(212,165,165,0.12);
+}
 .letters-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;margin-bottom:3rem}
-.letter-card{background:var(--white);border-radius:20px;border:1px solid rgba(212,165,165,0.18);box-shadow:0 4px 20px rgba(180,130,130,0.07);overflow:hidden}
+.letter-card{background:var(--white);border-radius:20px;border:1px solid rgba(212,165,165,0.18);box-shadow:0 4px 20px rgba(180,130,130,0.07);overflow:hidden;position:relative}
+.letter-card.pinned{border-color:rgba(212,165,165,0.5);box-shadow:0 6px 28px rgba(180,130,130,0.14)}
+.letter-pin-ribbon{
+  position:absolute;top:0;right:0;
+  width:0;height:0;
+  border-style:solid;border-width:0 42px 42px 0;
+  border-color:transparent var(--rose) transparent transparent;
+  z-index:2;
+}
+.letter-pin-ribbon::after{
+  content:'♡';position:absolute;top:4px;right:-34px;
+  font-size:0.75rem;color:white;line-height:1;
+}
 .letter-card-top{
   background:linear-gradient(135deg,#fdf0f0,#f8f0fa);
   padding:1.3rem 1.8rem 1rem;
@@ -216,12 +254,46 @@ textarea{resize:vertical;min-height:120px}
 .letter-from{font-size:0.68rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--dusty)}
 .letter-stamp{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--dusty));display:flex;align-items:center;justify-content:center;font-size:1rem}
 .letter-body{padding:1.5rem 1.8rem}
-.letter-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;line-height:1.85;color:var(--text);white-space:pre-wrap;max-height:160px;overflow:hidden;position:relative}
+.letter-text{
+  font-family:'Cormorant Garamond',serif;font-size:1.05rem;
+  line-height:1.85;color:var(--text);
+  white-space:pre-wrap;
+  max-height:160px;overflow:hidden;position:relative;
+}
 .letter-text.expanded{max-height:none}
 .letter-fade{position:absolute;bottom:0;left:0;right:0;height:50px;background:linear-gradient(transparent,white)}
 .letter-footer{padding:0.75rem 1.8rem 1.2rem;display:flex;justify-content:space-between;align-items:center}
 .letter-date-str{font-size:0.68rem;color:var(--text-light)}
 .letter-actions-row{display:flex;gap:0.5rem}
+.btn-pin{
+  background:transparent;color:var(--rose);
+  border:1px solid rgba(212,165,165,0.35);
+  font-size:0.68rem;padding:0.45rem 0.75rem;border-radius:50px;
+  cursor:pointer;font-family:'Jost',sans-serif;
+  transition:all 0.2s;letter-spacing:0.1em;
+}
+.btn-pin:hover{background:var(--blush)}
+.btn-pin.active{background:linear-gradient(135deg,var(--blush),#f0e0f0);border-color:var(--rose)}
+
+/* ── CONFIRM MODAL ── */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(50,30,30,0.4);
+  backdrop-filter:blur(5px);z-index:400;
+  opacity:0;pointer-events:none;transition:opacity 0.25s;
+  display:flex;align-items:center;justify-content:center;padding:2rem;
+}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-box{
+  background:var(--cream);border-radius:24px;padding:2.2rem 2.4rem;
+  max-width:360px;width:100%;text-align:center;
+  box-shadow:0 20px 60px rgba(100,50,50,0.18);
+  transform:translateY(12px) scale(0.97);
+  transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+}
+.modal-overlay.open .modal-box{transform:translateY(0) scale(1)}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;margin-bottom:0.6rem}
+.modal-msg{font-size:0.82rem;color:var(--text-light);line-height:1.6;margin-bottom:1.8rem}
+.modal-actions{display:flex;gap:0.75rem;justify-content:center}
 
 /* ── MEMORIES ── */
 .album-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.2rem;margin-bottom:3rem}
@@ -238,13 +310,65 @@ textarea{resize:vertical;min-height:120px}
 .mem-back-text{font-family:'Cormorant Garamond',serif;font-size:1rem;line-height:1.65;color:var(--text)}
 .mem-back-date{font-size:0.68rem;letter-spacing:0.15em;color:var(--text-light);text-transform:uppercase}
 .mem-back-actions{display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:center}
+.mem-delete-btn{
+  position:absolute;top:0.5rem;left:0.5rem;z-index:5;
+  width:26px;height:26px;border-radius:50%;border:none;cursor:pointer;
+  background:rgba(255,255,255,0.88);backdrop-filter:blur(4px);
+  color:#b07070;font-size:0.75rem;line-height:1;
+  display:flex;align-items:center;justify-content:center;
+  transition:background 0.2s,color 0.2s;
+  box-shadow:0 1px 4px rgba(0,0,0,0.08);
+}
+.mem-delete-btn:hover{background:#fff0f0;color:#903030}
+.mem-flip-btn{
+  position:absolute;bottom:0.6rem;right:0.6rem;
+  background:rgba(255,255,255,0.88);backdrop-filter:blur(4px);
+  border:1px solid rgba(212,165,165,0.35);border-radius:20px;
+  padding:0.25rem 0.7rem;font-size:0.65rem;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--dusty);cursor:pointer;
+  font-family:'Jost',sans-serif;transition:background 0.2s,color 0.2s;
+}
+.mem-flip-btn:hover{background:var(--blush);color:var(--deep)}
+.mem-back .mem-flip-btn{position:relative;bottom:auto;right:auto;margin-top:0.5rem}
 
-/* fullscreen */
-#fullscreen-viewer{position:fixed;inset:0;background:rgba(25,16,16,0.93);z-index:300;display:none;align-items:center;justify-content:center}
+/* ── FULLSCREEN SLIDESHOW ── */
+#fullscreen-viewer{
+  position:fixed;inset:0;background:rgba(20,12,12,0.95);
+  z-index:300;display:none;align-items:center;justify-content:center;
+}
 #fullscreen-viewer.open{display:flex}
-#fullscreen-img{max-width:90vw;max-height:88vh;border-radius:12px;object-fit:contain}
-.fs-close{position:absolute;top:1.5rem;right:1.8rem;background:none;border:none;color:rgba(255,255,255,0.7);font-size:1.8rem;cursor:pointer;transition:color 0.2s}
+#fullscreen-img{
+  max-width:82vw;max-height:82vh;border-radius:12px;object-fit:contain;
+  transition:opacity 0.22s ease;
+}
+#fullscreen-img.fading{opacity:0}
+.fs-close{position:absolute;top:1.5rem;right:1.8rem;background:none;border:none;color:rgba(255,255,255,0.7);font-size:1.8rem;cursor:pointer;transition:color 0.2s;z-index:2}
 .fs-close:hover{color:white}
+.fs-nav{
+  position:absolute;top:50%;transform:translateY(-50%);
+  background:rgba(255,255,255,0.1);backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,0.15);border-radius:50%;
+  width:46px;height:46px;display:flex;align-items:center;justify-content:center;
+  color:white;font-size:1.2rem;cursor:pointer;
+  transition:background 0.2s;z-index:2;
+}
+.fs-nav:hover{background:rgba(255,255,255,0.22)}
+#fs-prev{left:1.5rem}
+#fs-next{right:1.5rem}
+.fs-counter{
+  position:absolute;bottom:1.8rem;left:50%;transform:translateX(-50%);
+  font-size:0.7rem;letter-spacing:0.2em;color:rgba(255,255,255,0.5);
+  font-family:'Jost',sans-serif;
+}
+.fs-dots{
+  position:absolute;bottom:3.4rem;left:50%;transform:translateX(-50%);
+  display:flex;gap:0.4rem;
+}
+.fs-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:rgba(255,255,255,0.3);transition:background 0.2s,transform 0.2s;
+}
+.fs-dot.active{background:white;transform:scale(1.3)}
 
 /* ── BUCKET ROADMAP ── */
 .roadmap-wrap{position:relative;max-width:680px;margin:0 auto 4rem}
@@ -278,6 +402,27 @@ textarea{resize:vertical;min-height:120px}
 .stop-link:hover{background:var(--blush)}
 .stop-actions{display:flex;gap:0.4rem;justify-content:flex-end;margin-top:0.5rem}
 
+/* ── BUCKET PROGRESS ── */
+.bucket-progress-wrap{
+  max-width:680px;margin:0 auto 2.5rem;
+  background:var(--white);border-radius:16px;padding:1.2rem 1.8rem;
+  border:1px solid rgba(212,165,165,0.18);
+  box-shadow:0 4px 16px rgba(180,130,130,0.07);
+}
+.bucket-progress-label{
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--text-light);margin-bottom:0.75rem;
+}
+.bucket-progress-label span:last-child{color:var(--rose)}
+.bucket-progress-bar-bg{
+  height:5px;background:rgba(212,165,165,0.15);border-radius:3px;overflow:hidden;
+}
+.bucket-progress-bar-fill{
+  height:100%;background:linear-gradient(90deg,var(--rose),var(--dusty));
+  border-radius:3px;transition:width 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+
 /* ── TOAST ── */
 #toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--cream);padding:0.7rem 1.5rem;border-radius:50px;font-size:0.78rem;letter-spacing:0.08em;opacity:0;transition:all 0.3s;z-index:500;pointer-events:none;white-space:nowrap}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -300,6 +445,9 @@ footer{text-align:center;padding:3rem 1rem;font-size:0.7rem;letter-spacing:0.18e
   .road-stop:nth-child(odd),.road-stop:nth-child(even){flex-direction:column;padding:1rem 0 1rem 3.5rem;justify-content:flex-start}
   .stop-node{left:0;top:1.4rem;transform:none}
   .stop-card{max-width:100%}
+  #fs-prev{left:0.5rem}
+  #fs-next{right:0.5rem}
+  #fullscreen-img{max-width:92vw;max-height:74vh}
 }
 </style>
 </head>
@@ -346,8 +494,13 @@ footer{text-align:center;padding:3rem 1rem;font-size:0.7rem;letter-spacing:0.18e
         <circle cx="133" cy="228" r="1.8" fill="#a07010" opacity="0.6"/>
       </svg>
     </div>
-    <h1 class="hero-monogram">Attaya &amp; Salsa</h1>
+    <h1 class="hero-monogram">A &amp; S</h1>
     <p class="hero-tagline">our little world</p>
+    <div class="hero-countdown">
+      <div class="countdown-days" id="countdown-days">—</div>
+      <div class="countdown-label">days together</div>
+      <div class="countdown-since" id="countdown-since"></div>
+    </div>
     <div class="scroll-cue"><div class="scroll-line"></div><span>scroll</span></div>
   </section>
 
@@ -362,13 +515,11 @@ footer{text-align:center;padding:3rem 1rem;font-size:0.7rem;letter-spacing:0.18e
             <radialGradient id="gCtr" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fef2c0"/><stop offset="100%" stop-color="#f0c050"/></radialGradient>
           </defs>
 
-          <!-- STEM -->
           <path id="s-stem"
             d="M170 480 Q166 430 168 370 Q169 345 170 320"
             stroke="#8faa82" stroke-width="5" fill="none" stroke-linecap="round"
             stroke-dasharray="175" stroke-dashoffset="175"/>
 
-          <!-- SEPAL -->
           <g id="s-sepal" opacity="0">
             <path d="M160 348 Q153 330 160 316" stroke="#7a9e6e" stroke-width="2.2" fill="none" opacity="0.75"/>
             <path d="M180 348 Q187 330 180 316" stroke="#7a9e6e" stroke-width="2.2" fill="none" opacity="0.75"/>
@@ -376,19 +527,16 @@ footer{text-align:center;padding:3rem 1rem;font-size:0.7rem;letter-spacing:0.18e
             <path d="M170 350 Q178 335 176 318" stroke="#7a9e6e" stroke-width="1.5" fill="none" opacity="0.5"/>
           </g>
 
-          <!-- LEAF LEFT -->
           <g id="s-ll" opacity="0">
             <path d="M168 405 Q128 380 120 358 Q144 367 168 388" fill="#7a9e6e"/>
             <path d="M168 405 Q134 376 126 352" stroke="#5a8050" stroke-width="1.2" fill="none" opacity="0.45"/>
           </g>
 
-          <!-- LEAF RIGHT -->
           <g id="s-lr" opacity="0">
             <path d="M172 425 Q212 398 220 374 Q196 385 172 408" fill="#7a9e6e"/>
             <path d="M172 425 Q206 394 214 370" stroke="#5a8050" stroke-width="1.2" fill="none" opacity="0.45"/>
           </g>
 
-          <!-- OUTER PETALS — 6 individual, staggered -->
           <g id="g-op1" opacity="0"><ellipse cx="170" cy="274" rx="21" ry="46" fill="url(#gA)" transform="rotate(-60 170 322)" opacity="0.68"/></g>
           <g id="g-op2" opacity="0"><ellipse cx="170" cy="274" rx="21" ry="46" fill="url(#gA)" transform="rotate(-36 170 322)" opacity="0.72"/></g>
           <g id="g-op3" opacity="0"><ellipse cx="170" cy="274" rx="21" ry="46" fill="url(#gA)" transform="rotate(-12 170 322)" opacity="0.76"/></g>
@@ -396,20 +544,17 @@ footer{text-align:center;padding:3rem 1rem;font-size:0.7rem;letter-spacing:0.18e
           <g id="g-op5" opacity="0"><ellipse cx="170" cy="274" rx="21" ry="46" fill="url(#gA)" transform="rotate(36 170 322)" opacity="0.72"/></g>
           <g id="g-op6" opacity="0"><ellipse cx="170" cy="274" rx="21" ry="46" fill="url(#gA)" transform="rotate(60 170 322)" opacity="0.68"/></g>
 
-          <!-- MID PETALS — 5 -->
           <g id="g-mp1" opacity="0"><ellipse cx="170" cy="283" rx="16" ry="36" fill="url(#gB)" transform="rotate(-50 170 320)"/></g>
           <g id="g-mp2" opacity="0"><ellipse cx="170" cy="283" rx="16" ry="36" fill="url(#gB)" transform="rotate(-22 170 320)"/></g>
           <g id="g-mp3" opacity="0"><ellipse cx="170" cy="283" rx="16" ry="36" fill="url(#gB)" transform="rotate(6 170 320)"/></g>
           <g id="g-mp4" opacity="0"><ellipse cx="170" cy="283" rx="16" ry="36" fill="url(#gB)" transform="rotate(34 170 320)"/></g>
           <g id="g-mp5" opacity="0"><ellipse cx="170" cy="283" rx="16" ry="36" fill="url(#gB)" transform="rotate(62 170 320)"/></g>
 
-          <!-- INNER PETALS — 4 -->
           <g id="g-ip1" opacity="0"><ellipse cx="170" cy="293" rx="11" ry="25" fill="url(#gC)" transform="rotate(-38 170 318)"/></g>
           <g id="g-ip2" opacity="0"><ellipse cx="170" cy="293" rx="11" ry="25" fill="url(#gC)" transform="rotate(-10 170 318)"/></g>
           <g id="g-ip3" opacity="0"><ellipse cx="170" cy="293" rx="11" ry="25" fill="url(#gC)" transform="rotate(18 170 318)"/></g>
           <g id="g-ip4" opacity="0"><ellipse cx="170" cy="293" rx="11" ry="25" fill="url(#gC)" transform="rotate(46 170 318)"/></g>
 
-          <!-- CENTER -->
           <g id="g-ctr" opacity="0">
             <circle cx="170" cy="318" r="19" fill="url(#gCtr)"/>
             <circle cx="164" cy="313" r="3.2" fill="#c89010" opacity="0.9"/>
@@ -421,7 +566,6 @@ footer{text-align:center;padding:3rem 1rem;font-size:0.7rem;letter-spacing:0.18e
             <circle cx="166" cy="324" r="1.8" fill="#a07010" opacity="0.5"/>
           </g>
 
-          <!-- SIDE BRANCH + BUD -->
           <path id="g-branch"
             d="M168 372 Q196 352 216 336"
             stroke="#8faa82" stroke-width="3.5" fill="none" stroke-linecap="round"
@@ -461,7 +605,7 @@ footer{text-align:center;padding:3rem 1rem;font-size:0.7rem;letter-spacing:0.18e
       </div>
     </div>
   </section>
-  <footer>made with love · Attaya &amp; Salsa</footer>
+  <footer>made with love · A &amp; S</footer>
 </div>
 
 <!-- ══════════════════════
@@ -494,9 +638,14 @@ footer{text-align:center;padding:3rem 1rem;font-size:0.7rem;letter-spacing:0.18e
   </div>
 </div>
 
-<div id="fullscreen-viewer" onclick="closeFullscreen()">
-  <button class="fs-close">✕</button>
+<!-- FULLSCREEN SLIDESHOW -->
+<div id="fullscreen-viewer">
+  <button class="fs-close" onclick="closeFullscreen()">✕</button>
+  <button class="fs-nav" id="fs-prev" onclick="slideshowNav(-1)">&#8592;</button>
   <img id="fullscreen-img" src="" alt="">
+  <button class="fs-nav" id="fs-next" onclick="slideshowNav(1)">&#8594;</button>
+  <div class="fs-dots" id="fs-dots"></div>
+  <div class="fs-counter" id="fs-counter"></div>
 </div>
 
 <!-- ══════════════════════
@@ -508,6 +657,15 @@ footer{text-align:center;padding:3rem 1rem;font-size:0.7rem;letter-spacing:0.18e
     <p class="page-hero-sub">everything we want to do together</p>
   </div>
   <div class="page-content">
+    <div class="bucket-progress-wrap" id="bucket-progress-wrap" style="display:none">
+      <div class="bucket-progress-label">
+        <span>journey progress</span>
+        <span id="bucket-progress-text">0 of 0</span>
+      </div>
+      <div class="bucket-progress-bar-bg">
+        <div class="bucket-progress-bar-fill" id="bucket-progress-fill" style="width:0%"></div>
+      </div>
+    </div>
     <div class="roadmap-wrap">
       <div class="road-path" id="road-path"></div>
       <div class="roadmap-stops" id="roadmap-stops">
@@ -518,7 +676,7 @@ footer{text-align:center;padding:3rem 1rem;font-size:0.7rem;letter-spacing:0.18e
 </div>
 
 <!-- ══════════════════════
-     FAB + DRAWER OVERLAY
+     FAB + DRAWERS
 ══════════════════════ -->
 <button class="fab" id="fab" onclick="openDrawer()">+</button>
 <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
@@ -533,7 +691,7 @@ footer{text-align:center;padding:3rem 1rem;font-size:0.7rem;letter-spacing:0.18e
   <div class="drawer-body">
     <div class="form-group" style="max-width:180px">
       <label>from</label>
-      <select id="letter-author"><option value="A">Attaya</option><option value="S">Salsa</option></select>
+      <select id="letter-author"><option value="A">A</option><option value="S">S</option></select>
     </div>
     <div class="form-group">
       <label>your words</label>
@@ -622,6 +780,18 @@ footer{text-align:center;padding:3rem 1rem;font-size:0.7rem;letter-spacing:0.18e
   </div>
 </div>
 
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal-box">
+    <div class="modal-title" id="confirm-title">are you sure?</div>
+    <div class="modal-msg" id="confirm-msg"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="confirmResolve(false)">cancel</button>
+      <button class="btn btn-danger" onclick="confirmResolve(true)" id="confirm-ok">remove</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
@@ -636,9 +806,13 @@ const H={
 
 async function supa(path,opts){
   opts=opts||{};
-  const r=await fetch(SUPA_URL+'/rest/v1/'+path,{headers:Object.assign({},H,opts.headers||{}),method:opts.method||'GET',body:opts.body});
-  if(!r.ok){const e=await r.json().catch(function(){return{};});throw new Error(e.message||r.statusText);}
-  const t=await r.text();return t?JSON.parse(t):null;
+  var r=await fetch(SUPA_URL+'/rest/v1/'+path,{
+    headers:Object.assign({},H,opts.headers||{}),
+    method:opts.method||'GET',
+    body:opts.body
+  });
+  if(!r.ok){var e=await r.json().catch(function(){return{};});throw new Error(e.message||r.statusText);}
+  var t=await r.text();return t?JSON.parse(t):null;
 }
 
 async function uploadToStorage(path,file){
@@ -659,7 +833,7 @@ async function uploadToStorage(path,file){
     var errMsg=await r.text().catch(function(){return r.status+' '+r.statusText;});
     throw new Error(errMsg);
   }
-  return SUPA_URL+'/storage/v1/object/public/uploads/'+path;
+  return SUPA_URL+'/storage/v1/object/public/uploads/'+safePath;
 }
 
 function sanitizeName(name){
@@ -674,12 +848,43 @@ function toast(msg,dur){
 }
 
 function esc(s){
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/\n/g,'<br>');
+  return String(s||'')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
 }
 
 function previewFile(input,id){
   document.getElementById(id).textContent=input.files[0]?input.files[0].name:'';
 }
+
+/* ── CONFIRM MODAL ── */
+var confirmResolve=null;
+function showConfirm(title,msg,okLabel){
+  return new Promise(function(resolve){
+    document.getElementById('confirm-title').textContent=title;
+    document.getElementById('confirm-msg').textContent=msg;
+    document.getElementById('confirm-ok').textContent=okLabel||'remove';
+    confirmResolve=function(result){
+      document.getElementById('confirm-modal').classList.remove('open');
+      confirmResolve=null;
+      resolve(result);
+    };
+    document.getElementById('confirm-modal').classList.add('open');
+  });
+}
+
+/* ── ANNIVERSARY COUNTDOWN ── */
+(function(){
+  var START=new Date('2026-02-22');
+  var now=new Date();
+  var diff=Math.floor((now-START)/(1000*60*60*24));
+  document.getElementById('countdown-days').textContent=diff.toLocaleString();
+  var opts={day:'numeric',month:'long',year:'numeric'};
+  document.getElementById('countdown-since').textContent=
+    'since '+START.toLocaleDateString('en-GB',opts);
+})();
 
 /* ── NAVIGATION ── */
 var currentPage='home';
@@ -739,7 +944,6 @@ function closeDrawer(){
   function c(v){return Math.max(0,Math.min(1,v));}
   function ease(t){return t<0.5?2*t*t:-1+(4-2*t)*t;}
   function lerp(a,b,t){return a+(b-a)*t;}
-
   function scaleEl(el,s,ox,oy){
     el.style.transformOrigin=ox+'px '+oy+'px';
     el.style.transform='scale('+s+')';
@@ -752,53 +956,39 @@ function closeDrawer(){
     var total=section.offsetHeight-homePage.clientHeight;
     var p=c((scrollTop-sectionTop)/total);
 
-    /* stem grows 0→0.15 */
     stem.style.strokeDashoffset=lerp(175,0,ease(c(p/0.15)));
-
-    /* leaves 0.14→0.26 */
     ll.style.opacity=ease(c((p-0.14)/0.1));
     lr.style.opacity=ease(c((p-0.18)/0.1));
-
-    /* sepal 0.22→0.30 */
     sepal.style.opacity=ease(c((p-0.22)/0.1));
 
-    /* outer petals — 6, each 0.28 + i*0.05 */
     ops.forEach(function(el,i){
       var t=ease(c((p-(0.28+i*0.05))/0.1));
       el.style.opacity=t;
       scaleEl(el,lerp(0.2,1,t),170,322);
     });
-
-    /* mid petals 0.60 + i*0.04 */
     mps.forEach(function(el,i){
       var t=ease(c((p-(0.60+i*0.04))/0.09));
       el.style.opacity=t;
       scaleEl(el,lerp(0.15,1,t),170,320);
     });
-
-    /* inner petals 0.78 + i*0.03 */
     ips.forEach(function(el,i){
       var t=ease(c((p-(0.78+i*0.03))/0.08));
       el.style.opacity=t;
       scaleEl(el,lerp(0.1,1,t),170,318);
     });
 
-    /* center 0.88 */
     var tc=ease(c((p-0.88)/0.07));
     ctr.style.opacity=tc;
     scaleEl(ctr,lerp(0.1,1,tc),170,318);
 
-    /* side branch 0.72 */
     var tb=ease(c((p-0.72)/0.1));
     branch.style.opacity=tb>0?1:0;
     branch.style.strokeDashoffset=lerp(60,0,tb);
 
-    /* bud 0.80 */
     var tbu=ease(c((p-0.80)/0.1));
     bud.style.opacity=tbu;
     scaleEl(bud,lerp(0.2,1,tbu),216,330);
 
-    /* label 0.93 */
     label.style.opacity=ease(c((p-0.93)/0.06));
   });
 })();
@@ -809,36 +999,75 @@ async function loadLetters(){
   el.innerHTML='<div class="loading-dots"><span></span><span></span><span></span></div>';
   try{
     var data=await supa('letters?order=created_at.desc&select=*');
-    if(!data.length){el.innerHTML='<div class="empty-state">no letters yet — be the first to write one</div>';return;}
+    if(!data.length){
+      el.innerHTML='<div class="empty-state">no letters yet — be the first to write one</div>';
+      return;
+    }
+    data.sort(function(a,b){return (b.pinned?1:0)-(a.pinned?1:0);});
     el.innerHTML=data.map(function(l){return buildLetter(l);}).join('');
-  }catch(e){el.innerHTML='<div class="empty-state">could not load letters</div>';}
+  }catch(e){
+    el.innerHTML='<div class="empty-state">could not load letters</div>';
+  }
 }
+
 function buildLetter(l){
   var d=new Date(l.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
-  var authorName=l.author==='A'?'Attaya':l.author==='S'?'Salsa':l.author;
-  return '<div class="letter-card" id="lc-'+l.id+'">'+
+  var pinnedRibbon=l.pinned?'<div class="letter-pin-ribbon"></div>':'';
+  var pinnedClass=l.pinned?' pinned':'';
+  var pinBtnClass=l.pinned?' active':'';
+  var pinLabel=l.pinned?'pinned':'pin';
+
+  var contentText=String(l.content||'');
+  var needsExpand=contentText.length>280;
+  var readMoreBtn=needsExpand
+    ?'<button class="btn btn-ghost btn-sm" id="rbtn-'+l.id+'" onclick="expandLetter(\''+l.id+'\')">read more</button>'
+    :'';
+
+  return '<div class="letter-card'+pinnedClass+'" id="lc-'+l.id+'">'+
+    pinnedRibbon+
     '<div class="letter-card-top">'+
-      '<span class="letter-from">from '+esc(authorName)+'</span>'+
+      '<span class="letter-from">from '+esc(l.author)+'</span>'+
       '<div class="letter-stamp">'+(l.author==='A'?'💌':'🌸')+'</div>'+
     '</div>'+
     '<div class="letter-body">'+
-      '<div class="letter-text" id="lt-'+l.id+'">'+esc(l.content)+'<div class="letter-fade" id="lf-'+l.id+'"></div></div>'+
+      '<div class="letter-text" id="lt-'+l.id+'">'+esc(contentText)+
+        (needsExpand?'<div class="letter-fade" id="lf-'+l.id+'"></div>':'')+
+      '</div>'+
     '</div>'+
     '<div class="letter-footer">'+
       '<span class="letter-date-str">'+d+'</span>'+
       '<div class="letter-actions-row">'+
-        '<button class="btn btn-ghost btn-sm" onclick="expandLetter(\''+l.id+'\')">read more</button>'+
+        readMoreBtn+
+        '<button class="btn-pin'+pinBtnClass+'" onclick="togglePinLetter(\''+l.id+'\','+!!l.pinned+')">'+pinLabel+'</button>'+
         '<button class="btn btn-danger btn-sm" onclick="deleteLetter(\''+l.id+'\')">delete</button>'+
       '</div>'+
     '</div>'+
   '</div>';
 }
+
 function expandLetter(id){
   var el=document.getElementById('lt-'+id);
   var fade=document.getElementById('lf-'+id);
-  el.classList.toggle('expanded');
-  if(fade)fade.style.display=el.classList.contains('expanded')?'none':'block';
+  var btn=document.getElementById('rbtn-'+id);
+  var expanded=el.classList.toggle('expanded');
+  if(fade)fade.style.display=expanded?'none':'block';
+  if(btn)btn.textContent=expanded?'collapse':'read more';
 }
+
+async function togglePinLetter(id,current){
+  try{
+    await supa('letters?id=eq.'+id,{method:'PATCH',body:JSON.stringify({pinned:!current})});
+    loadLetters();
+  }catch(e){
+    var msg=e.message||'';
+    if(msg.indexOf('pinned')!==-1||msg.indexOf('column')!==-1){
+      toast('add a pinned boolean column to your letters table first');
+    }else{
+      toast('could not update');
+    }
+  }
+}
+
 async function submitLetter(){
   var author=document.getElementById('letter-author').value;
   var content=document.getElementById('letter-content').value.trim();
@@ -847,12 +1076,20 @@ async function submitLetter(){
     await supa('letters',{method:'POST',body:JSON.stringify({author:author,content:content})});
     document.getElementById('letter-content').value='';
     closeDrawer();toast('letter saved ♡');loadLetters();
-  }catch(e){toast('something went wrong');}
+  }catch(e){
+    toast('something went wrong');
+  }
 }
+
 async function deleteLetter(id){
-  if(!confirm('delete this letter?'))return;
-  await supa('letters?id=eq.'+id,{method:'DELETE',headers:{'Prefer':''}});
-  toast('deleted');loadLetters();
+  var ok=await showConfirm('delete this letter?','this cannot be undone.','delete');
+  if(!ok)return;
+  try{
+    await supa('letters?id=eq.'+id,{method:'DELETE',headers:{'Prefer':''}});
+    toast('deleted');loadLetters();
+  }catch(e){
+    toast('could not delete');
+  }
 }
 
 /* ── MEMORIES ── */
@@ -863,36 +1100,65 @@ function toggleMemType(){
 }
 toggleMemType();
 
+var slideshowUrls=[];
+var slideshowIndex=0;
+
 async function loadMemories(){
   var el=document.getElementById('album-grid');
   el.innerHTML='<div class="loading-dots"><span></span><span></span><span></span></div>';
   try{
     var data=await supa('memories?order=memory_date.desc&select=*');
-    if(!data.length){el.innerHTML='<div class="empty-state" style="grid-column:1/-1">no memories yet — add your first one</div>';return;}
+    slideshowUrls=data.filter(function(m){return m.image_url;}).map(function(m){return m.image_url;});
+    if(!data.length){
+      el.innerHTML='<div class="empty-state" style="grid-column:1/-1">no memories yet — add your first one</div>';
+      return;
+    }
     el.innerHTML=data.map(function(m){return buildMemCard(m);}).join('');
-  }catch(e){el.innerHTML='<div class="empty-state">could not load memories</div>';}
+  }catch(e){
+    el.innerHTML='<div class="empty-state">could not load memories</div>';
+  }
 }
+
 function buildMemCard(m){
   var date=m.memory_date?new Date(m.memory_date).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'';
   var badge=date?'<div class="mem-date-badge">'+date+'</div>':'';
+  var delBtn='<button class="mem-delete-btn" onclick="event.stopPropagation();deleteMemory(\''+m.id+'\')">✕</button>';
+
+  var imgIndex=slideshowUrls.indexOf(m.image_url);
+
   var front='';
   if(m.type==='text'){
-    front='<div class="mem-text-only">'+esc(m.caption||'')+'</div>';
+    front='<div class="mem-front" style="position:relative">'+delBtn+
+      '<div class="mem-text-only">'+esc(m.caption||'')+'</div>'+
+    '</div>';
   }else if(m.image_url){
     var cap=(m.type==='photo'&&m.caption)?'<div class="mem-caption-strip">'+esc(m.caption)+'</div>':'';
-    front='<div class="mem-front"><img src="'+m.image_url+'" alt="memory" onclick="event.stopPropagation();openFullscreen(\''+m.image_url+'\')">'+badge+cap+'</div>';
+    var flipBtn=m.type==='photo-text'
+      ?'<button class="mem-flip-btn" onclick="event.stopPropagation();document.getElementById(\'mc-'+m.id+'\').classList.toggle(\'flipped\')">flip ↺</button>'
+      :'';
+    front='<div class="mem-front">'+
+      delBtn+
+      '<img src="'+esc(m.image_url)+'" alt="memory" onclick="event.stopPropagation();openFullscreen('+imgIndex+')">'+
+      badge+cap+flipBtn+
+    '</div>';
   }
-  var backInner=(m.type==='photo-text')
-    ?'<div class="mem-back-text">'+esc(m.caption||'')+'</div><div class="mem-back-date">'+date+'</div>'
-    :'<div class="mem-back-date">'+date+'</div>';
-  var back='<div class="mem-back">'+backInner+
-    '<div class="mem-back-actions">'+
-      '<button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteMemory(\''+m.id+'\')">delete</button>'+
-    '</div></div>';
-  var flip=m.type!=='text';
-  return '<div class="mem-card" id="mc-'+m.id+'"'+(flip?' onclick="this.classList.toggle(\'flipped\')"':'')+'>'+
-    '<div class="mem-inner">'+front+back+'</div></div>';
+
+  var back='';
+  if(m.type==='photo-text'){
+    back='<div class="mem-back">'+
+      '<div class="mem-back-text">'+esc(m.caption||'')+'</div>'+
+      '<div class="mem-back-date">'+date+'</div>'+
+      '<button class="mem-flip-btn" onclick="event.stopPropagation();document.getElementById(\'mc-'+m.id+'\').classList.remove(\'flipped\')">flip back ↺</button>'+
+    '</div>';
+  }else{
+    back='<div class="mem-back"><div class="mem-back-date">'+date+'</div></div>';
+  }
+
+  return '<div class="mem-card" id="mc-'+m.id+'">'+
+    '<div class="mem-inner">'+front+back+'</div>'+
+  '</div>';
 }
+
 async function submitMemory(){
   var type=document.getElementById('mem-type').value;
   var caption=document.getElementById('mem-caption').value.trim();
@@ -913,18 +1179,85 @@ async function submitMemory(){
     document.getElementById('mem-caption').value='';
     document.getElementById('mem-date').value='';
     closeDrawer();toast('memory saved ♡');loadMemories();
-  }catch(e){toast('something went wrong: '+e.message);}
+  }catch(e){
+    toast('something went wrong: '+e.message);
+  }
 }
+
 async function deleteMemory(id){
-  if(!confirm('delete this memory?'))return;
-  await supa('memories?id=eq.'+id,{method:'DELETE',headers:{'Prefer':''}});
-  toast('deleted');loadMemories();
+  var ok=await showConfirm('delete this memory?','this cannot be undone.','delete');
+  if(!ok)return;
+  try{
+    await supa('memories?id=eq.'+id,{method:'DELETE',headers:{'Prefer':''}});
+    toast('deleted');loadMemories();
+  }catch(e){
+    toast('could not delete');
+  }
 }
-function openFullscreen(url){
-  document.getElementById('fullscreen-img').src=url;
+
+function openFullscreen(index){
+  if(!slideshowUrls.length)return;
+  slideshowIndex=index>=0?index:0;
   document.getElementById('fullscreen-viewer').classList.add('open');
+  renderSlide();
 }
-function closeFullscreen(){document.getElementById('fullscreen-viewer').classList.remove('open');}
+
+function closeFullscreen(){
+  document.getElementById('fullscreen-viewer').classList.remove('open');
+}
+
+function renderSlide(){
+  var img=document.getElementById('fullscreen-img');
+  var total=slideshowUrls.length;
+  var url=slideshowUrls[slideshowIndex];
+
+  img.classList.add('fading');
+  setTimeout(function(){
+    img.src=url;
+    img.onload=function(){img.classList.remove('fading');};
+  },120);
+
+  document.getElementById('fs-counter').textContent=(slideshowIndex+1)+' / '+total;
+
+  document.getElementById('fs-prev').style.display=total>1?'flex':'none';
+  document.getElementById('fs-next').style.display=total>1?'flex':'none';
+
+  var dotsEl=document.getElementById('fs-dots');
+  if(total<=12){
+    dotsEl.innerHTML='';
+    for(var i=0;i<total;i++){
+      var d=document.createElement('div');
+      d.className='fs-dot'+(i===slideshowIndex?' active':'');
+      (function(idx){d.onclick=function(){slideshowIndex=idx;renderSlide();};})(i);
+      dotsEl.appendChild(d);
+    }
+  }else{
+    dotsEl.innerHTML='';
+  }
+}
+
+function slideshowNav(dir){
+  var total=slideshowUrls.length;
+  slideshowIndex=(slideshowIndex+dir+total)%total;
+  renderSlide();
+}
+
+document.getElementById('fullscreen-viewer').addEventListener('keydown',function(e){
+  if(e.key==='ArrowLeft')slideshowNav(-1);
+  if(e.key==='ArrowRight')slideshowNav(1);
+  if(e.key==='Escape')closeFullscreen();
+});
+document.getElementById('fullscreen-viewer').setAttribute('tabindex','0');
+
+(function(){
+  var viewer=document.getElementById('fullscreen-viewer');
+  var touchStartX=0;
+  viewer.addEventListener('touchstart',function(e){touchStartX=e.touches[0].clientX;},{passive:true});
+  viewer.addEventListener('touchend',function(e){
+    var dx=e.changedTouches[0].clientX-touchStartX;
+    if(Math.abs(dx)>50){slideshowNav(dx<0?1:-1);}
+  },{passive:true});
+})();
 
 /* ── BUCKET LIST ── */
 async function loadBucket(){
@@ -935,12 +1268,24 @@ async function loadBucket(){
     if(!data.length){
       el.innerHTML='<div class="empty-state">nothing on the journey yet — dream big</div>';
       document.getElementById('road-path').style.display='none';
+      document.getElementById('bucket-progress-wrap').style.display='none';
       return;
     }
     document.getElementById('road-path').style.display='block';
+
+    var done=data.filter(function(b){return b.completed;}).length;
+    var total=data.length;
+    var pct=total?Math.round((done/total)*100):0;
+    document.getElementById('bucket-progress-wrap').style.display='block';
+    document.getElementById('bucket-progress-text').textContent=done+' of '+total+' done';
+    document.getElementById('bucket-progress-fill').style.width=pct+'%';
+
     el.innerHTML=data.map(function(b,i){return buildStop(b,i);}).join('');
-  }catch(e){el.innerHTML='<div class="empty-state">could not load list</div>';}
+  }catch(e){
+    el.innerHTML='<div class="empty-state">could not load list</div>';
+  }
 }
+
 var stopEmojis=['🌸','🌿','✈️','🌊','🍃','⭐','🌙','🎋','🌺','🏔️','🌏','🎑','🍜','🎭','🌅'];
 function buildStop(b,i){
   var links='';
@@ -957,6 +1302,7 @@ function buildStop(b,i){
     '</div>'+
   '</div>';
 }
+
 async function submitBucket(){
   var title=document.getElementById('bucket-title').value.trim();
   if(!title){toast('give it a title');return;}
@@ -977,16 +1323,29 @@ async function submitBucket(){
     fileInput.value='';
     document.getElementById('bucket-file-prev').textContent='';
     closeDrawer();toast('added to the journey ♡');loadBucket();
-  }catch(e){toast('something went wrong');}
+  }catch(e){
+    toast('something went wrong');
+  }
 }
+
 async function toggleBucket(id,current){
-  await supa('bucket_list?id=eq.'+id,{method:'PATCH',body:JSON.stringify({completed:!current})});
-  loadBucket();
+  try{
+    await supa('bucket_list?id=eq.'+id,{method:'PATCH',body:JSON.stringify({completed:!current})});
+    loadBucket();
+  }catch(e){
+    toast('could not update');
+  }
 }
+
 async function deleteBucket(id){
-  if(!confirm('remove from the journey?'))return;
-  await supa('bucket_list?id=eq.'+id,{method:'DELETE',headers:{'Prefer':''}});
-  toast('removed');loadBucket();
+  var ok=await showConfirm('remove from the journey?','this cannot be undone.','remove');
+  if(!ok)return;
+  try{
+    await supa('bucket_list?id=eq.'+id,{method:'DELETE',headers:{'Prefer':''}});
+    toast('removed');loadBucket();
+  }catch(e){
+    toast('could not remove');
+  }
 }
 </script>
 </body>
