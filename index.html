@@ -243,15 +243,34 @@ textarea{resize:vertical;min-height:120px}
 .mem-text-only{width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:1.5rem;font-family:'Cormorant Garamond',serif;font-size:1.05rem;line-height:1.6;text-align:center;color:var(--text);background:linear-gradient(135deg,#fff8f8,#f8f4ff)}
 .mem-caption-strip{padding:0.6rem 0.9rem;font-size:0.73rem;color:var(--text-light);border-top:1px solid rgba(212,165,165,0.12);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mem-date-badge{position:absolute;top:0.6rem;right:0.6rem;background:rgba(255,255,255,0.88);backdrop-filter:blur(6px);border-radius:8px;padding:0.2rem 0.55rem;font-size:0.62rem;color:var(--text-light)}
-.mem-back{transform:rotateY(180deg);background:linear-gradient(135deg,#fef0f0,#f5f0ff);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;gap:1rem;text-align:center}
-.mem-back-text{font-family:'Cormorant Garamond',serif;font-size:1rem;line-height:1.65;color:var(--text)}
-.mem-back-date{font-size:0.68rem;letter-spacing:0.15em;color:var(--text-light);text-transform:uppercase}
-.mem-back-actions{display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:center}
+
+/* FIXED: mem-back is now scrollable with a sticky flip-back button */
+.mem-back{
+  transform:rotateY(180deg);
+  background:linear-gradient(135deg,#fef0f0,#f5f0ff);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:flex-start;
+  padding:1.5rem 1.5rem 0;
+  gap:0.75rem;text-align:center;
+  overflow-y:auto;
+}
+.mem-back-text{font-family:'Cormorant Garamond',serif;font-size:1rem;line-height:1.65;color:var(--text);flex-shrink:0}
+.mem-back-date{font-size:0.68rem;letter-spacing:0.15em;color:var(--text-light);text-transform:uppercase;flex-shrink:0}
+.mem-back-flip-anchor{
+  position:sticky;bottom:0;
+  width:calc(100% + 3rem);margin-left:-1.5rem;
+  display:flex;justify-content:center;
+  padding:0.9rem 0 0.75rem;
+  background:linear-gradient(transparent,rgba(248,240,255,0.97) 45%);
+  flex-shrink:0;
+  margin-top:auto;
+}
+
 .mem-delete-btn{position:absolute;top:0.5rem;left:0.5rem;z-index:5;width:26px;height:26px;border-radius:50%;border:none;cursor:pointer;background:rgba(255,255,255,0.88);backdrop-filter:blur(4px);color:#b07070;font-size:0.75rem;line-height:1;display:flex;align-items:center;justify-content:center;transition:background 0.2s,color 0.2s;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
 .mem-delete-btn:hover{background:#fff0f0;color:#903030}
 .mem-flip-btn{position:absolute;bottom:0.6rem;right:0.6rem;background:rgba(255,255,255,0.88);backdrop-filter:blur(4px);border:1px solid rgba(212,165,165,0.35);border-radius:20px;padding:0.25rem 0.7rem;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--dusty);cursor:pointer;font-family:'Jost',sans-serif;transition:background 0.2s,color 0.2s}
 .mem-flip-btn:hover{background:var(--blush);color:var(--deep)}
-.mem-back .mem-flip-btn{position:relative;bottom:auto;right:auto;margin-top:0.5rem}
+.mem-back .mem-flip-btn{position:relative;bottom:auto;right:auto}
 
 #fullscreen-viewer{position:fixed;inset:0;background:rgba(20,12,12,0.95);z-index:300;display:none;align-items:center;justify-content:center}
 #fullscreen-viewer.open{display:flex}
@@ -293,7 +312,6 @@ textarea{resize:vertical;min-height:120px}
 .bucket-progress-bar-bg{height:5px;background:rgba(212,165,165,0.15);border-radius:3px;overflow:hidden}
 .bucket-progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--rose),var(--dusty));border-radius:3px;transition:width 0.6s cubic-bezier(0.4,0,0.2,1)}
 
-/* ── DIGITAL GIFTS ── */
 .gifts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.4rem;margin-bottom:3rem}
 .gift-card{
   background:var(--white);border-radius:20px;
@@ -379,7 +397,6 @@ textarea{resize:vertical;min-height:120px}
 .gift-delete-btn{position:absolute;top:0.6rem;right:0.6rem;z-index:3;width:26px;height:26px;border-radius:50%;border:none;cursor:pointer;background:rgba(255,255,255,0.88);backdrop-filter:blur(4px);color:#b07070;font-size:0.75rem;display:flex;align-items:center;justify-content:center;transition:background 0.2s;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
 .gift-delete-btn:hover{background:#fff0f0;color:#903030}
 
-/* ── GIFT VIEWER MODAL ── */
 #gift-viewer{
   position:fixed;inset:0;z-index:450;
   background:rgba(18,10,10,0.92);
@@ -417,27 +434,10 @@ textarea{resize:vertical;min-height:120px}
   display:flex;align-items:center;justify-content:center;
   position:relative;
 }
-#gift-viewer-inner img{
-  max-width:100%;max-height:82vh;
-  object-fit:contain;border-radius:8px;
-  box-shadow:0 8px 48px rgba(0,0,0,0.5);
-}
-#gift-viewer-inner video{
-  max-width:100%;max-height:82vh;
-  border-radius:8px;
-  box-shadow:0 8px 48px rgba(0,0,0,0.5);
-  background:#000;
-}
-#gift-viewer-inner audio{
-  width:min(480px,86vw);
-}
-#gift-viewer-inner iframe{
-  width:100%;height:82vh;
-  border:none;border-radius:8px;
-  background:#fff;
-  box-shadow:0 8px 48px rgba(0,0,0,0.5);
-}
-
+#gift-viewer-inner img{max-width:100%;max-height:82vh;object-fit:contain;border-radius:8px;box-shadow:0 8px 48px rgba(0,0,0,0.5)}
+#gift-viewer-inner video{max-width:100%;max-height:82vh;border-radius:8px;box-shadow:0 8px 48px rgba(0,0,0,0.5);background:#000}
+#gift-viewer-inner audio{width:min(480px,86vw)}
+#gift-viewer-inner iframe{width:100%;height:82vh;border:none;border-radius:8px;background:#fff;box-shadow:0 8px 48px rgba(0,0,0,0.5)}
 
 #toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--cream);padding:0.7rem 1.5rem;border-radius:50px;font-size:0.78rem;letter-spacing:0.08em;opacity:0;transition:all 0.3s;z-index:500;pointer-events:none;white-space:nowrap}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -1005,7 +1005,6 @@ function closeDrawer(){
   });
 })();
 
-/* ── LETTERS ── */
 async function loadLetters(){
   var el=document.getElementById('letters-grid');
   el.innerHTML='<div class="loading-dots"><span></span><span></span><span></span></div>';
@@ -1083,7 +1082,6 @@ async function deleteLetter(id){
   }catch(e){toast('could not delete');}
 }
 
-/* ── MEMORIES ── */
 function toggleMemType(){
   var t=document.getElementById('mem-type').value;
   document.getElementById('mem-photo-area').style.display=t==='text'?'none':'block';
@@ -1122,7 +1120,13 @@ function buildMemCard(m){
   }
   var back='';
   if(m.type==='photo-text'){
-    back='<div class="mem-back"><div class="mem-back-text">'+esc(m.caption||'')+'</div><div class="mem-back-date">'+date+'</div><button class="mem-flip-btn" onclick="event.stopPropagation();document.getElementById(\'mc-'+m.id+'\').classList.remove(\'flipped\')">flip back &#x21BA;</button></div>';
+    back='<div class="mem-back">'+
+      '<div class="mem-back-text">'+esc(m.caption||'')+'</div>'+
+      '<div class="mem-back-date">'+date+'</div>'+
+      '<div class="mem-back-flip-anchor">'+
+        '<button class="mem-flip-btn" onclick="event.stopPropagation();document.getElementById(\'mc-'+m.id+'\').classList.remove(\'flipped\')">flip back &#x21BA;</button>'+
+      '</div>'+
+    '</div>';
   }else{
     back='<div class="mem-back"><div class="mem-back-date">'+date+'</div></div>';
   }
@@ -1202,7 +1206,6 @@ document.getElementById('fullscreen-viewer').setAttribute('tabindex','0');
   viewer.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-touchStartX;if(Math.abs(dx)>50){slideshowNav(dx<0?1:-1);}},{passive:true});
 })();
 
-/* ── BUCKET LIST ── */
 async function loadBucket(){
   var el=document.getElementById('roadmap-stops');
   el.innerHTML='<div class="loading-dots"><span></span><span></span><span></span></div>';
@@ -1274,7 +1277,6 @@ async function deleteBucket(id){
   catch(e){toast('could not remove');}
 }
 
-/* ── DIGITAL GIFTS ── */
 function giftFileType(fileType,fileUrl){
   var t=(fileType||'').toLowerCase();
   var u=(fileUrl||'').toLowerCase().split('?')[0];
@@ -1298,7 +1300,6 @@ function buildGiftCard(g){
   var kind=giftFileType(g.file_type,g.file_url);
   var icon=giftFileIcon(kind);
   var delBtn='<button class="gift-delete-btn" onclick="deleteGift(\''+g.id+'\')">&#x2715;</button>';
-
   var preview='';
   if(g.file_url){
     var safeUrl=esc(g.file_url);
@@ -1318,7 +1319,6 @@ function buildGiftCard(g){
       preview='<a class="gift-open-btn" href="'+safeUrl+'" target="_blank" rel="noopener" download>'+icon+' &nbsp;download '+kind+'</a>';
     }
   }
-
   var hasMsg=g.message&&g.message.trim();
   var msgBlock='';
   if(hasMsg){
@@ -1330,9 +1330,7 @@ function buildGiftCard(g){
       (needsExpand?'<button class="btn btn-ghost btn-sm" id="gmb-'+g.id+'" style="margin-top:0.5rem" onclick="expandGiftMsg(\''+g.id+'\')">read more</button>':'')+
     '</div>';
   }
-
   var dlBtn=g.file_url?'<a class="btn btn-ghost btn-sm" href="'+esc(g.file_url)+'" target="_blank" rel="noopener" download>download</a>':'';
-
   return '<div class="gift-card" id="gc-'+g.id+'">'+
     delBtn+
     '<div class="gift-card-top">'+
@@ -1362,28 +1360,20 @@ function openGiftViewer(kind,url,title,downloadUrl){
   ttl.textContent=title||'';
   dl.href=downloadUrl||url;
   dl.style.display=(kind==='html')?'none':'';
-
   if(kind==='image'){
     var img=document.createElement('img');
-    img.src=url;
-    img.alt=title||'';
+    img.src=url;img.alt=title||'';
     inner.appendChild(img);
   }else if(kind==='video'){
     var vid=document.createElement('video');
-    vid.controls=true;
-    vid.autoplay=true;
-    var src=document.createElement('source');
-    src.src=url;
-    vid.appendChild(src);
-    inner.appendChild(vid);
+    vid.controls=true;vid.autoplay=true;
+    var src=document.createElement('source');src.src=url;
+    vid.appendChild(src);inner.appendChild(vid);
   }else if(kind==='audio'){
     var aud=document.createElement('audio');
-    aud.controls=true;
-    aud.autoplay=true;
-    var asrc=document.createElement('source');
-    asrc.src=url;
-    aud.appendChild(asrc);
-    inner.appendChild(aud);
+    aud.controls=true;aud.autoplay=true;
+    var asrc=document.createElement('source');asrc.src=url;
+    aud.appendChild(asrc);inner.appendChild(aud);
   }else if(kind==='pdf'){
     var fr=document.createElement('iframe');
     fr.src=url+'#toolbar=1&navpanes=1&scrollbar=1&view=FitH';
@@ -1396,8 +1386,6 @@ function openGiftViewer(kind,url,title,downloadUrl){
     ifr.style.opacity='0';
     ifr.style.transition='opacity 0.35s ease';
     inner.appendChild(ifr);
-
-    // Show a loading indicator while fetching
     var loader=document.createElement('div');
     loader.id='html-viewer-loader';
     loader.style.cssText='position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;color:rgba(255,255,255,0.5);font-family:\'Jost\',sans-serif;font-size:0.78rem;letter-spacing:0.2em;text-transform:uppercase;';
@@ -1409,12 +1397,9 @@ function openGiftViewer(kind,url,title,downloadUrl){
       document.head.appendChild(ss);
     }
     inner.appendChild(loader);
-
-    // Fetch the HTML from Supabase storage and render via blob URL
-    // This bypasses Content-Disposition:attachment and CORS issues
     fetch(url)
       .then(function(res){
-        if(!res.ok) throw new Error('HTTP '+res.status);
+        if(!res.ok)throw new Error('HTTP '+res.status);
         return res.text();
       })
       .then(function(html){
@@ -1423,7 +1408,6 @@ function openGiftViewer(kind,url,title,downloadUrl){
         ifr.onload=function(){
           loader.remove();
           ifr.style.opacity='1';
-          // Clean up blob URL after load
           setTimeout(function(){URL.revokeObjectURL(blobUrl);},5000);
         };
         ifr.src=blobUrl;
@@ -1432,7 +1416,6 @@ function openGiftViewer(kind,url,title,downloadUrl){
         loader.innerHTML='<span style="color:rgba(255,120,120,0.8)">could not load gift page<br><small style="font-size:0.68rem;opacity:0.7">'+err.message+'</small></span>';
       });
   }
-
   document.getElementById('gift-viewer').classList.add('open');
   document.addEventListener('keydown',giftViewerKeyClose);
 }
@@ -1440,8 +1423,7 @@ function openGiftViewer(kind,url,title,downloadUrl){
 function closeGiftViewer(){
   var viewer=document.getElementById('gift-viewer');
   viewer.classList.remove('open');
-  var inner=document.getElementById('gift-viewer-inner');
-  inner.innerHTML='';
+  document.getElementById('gift-viewer-inner').innerHTML='';
   document.removeEventListener('keydown',giftViewerKeyClose);
 }
 
