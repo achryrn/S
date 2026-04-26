@@ -45,15 +45,15 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);ove
 #hero{
   height:100vh;display:flex;flex-direction:column;
   align-items:center;justify-content:center;
-  background:radial-gradient(ellipse at 40% 30%,rgba(245,200,200,0.2),transparent 58%),
-             radial-gradient(ellipse at 68% 78%,rgba(181,201,172,0.16),transparent 55%),
+  background:radial-gradient(ellipse at 40% 30%,rgba(200,200,210,0.15),transparent 58%),
+             radial-gradient(ellipse at 68% 78%,rgba(181,181,190,0.1),transparent 55%),
              var(--cream);
   position:relative;overflow:hidden;
 }
 .hero-monogram{
   font-family:'Cormorant Garamond',serif;
   font-size:clamp(5rem,12vw,9rem);font-weight:300;
-  letter-spacing:0.12em;color:var(--text);line-height:1;
+  letter-spacing:0.12em;color:var(--text-mid);line-height:1;
   opacity:0;transform:translateY(16px);
   animation:fadeUp 1.3s ease 0.2s forwards;
 }
@@ -73,10 +73,10 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);ove
 .countdown-days{
   font-family:'Cormorant Garamond',serif;
   font-size:clamp(2.2rem,6vw,3.8rem);font-weight:300;
-  color:var(--text);line-height:1;letter-spacing:0.04em;
+  color:var(--text-mid);line-height:1;letter-spacing:0.04em;
 }
 .countdown-label{font-size:0.62rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--text-light);margin-top:0.1rem}
-.countdown-since{font-size:0.68rem;color:var(--rose);letter-spacing:0.12em;margin-top:0.15rem}
+.countdown-since{font-size:0.68rem;color:var(--text-light);letter-spacing:0.12em;margin-top:0.15rem}
 .scroll-cue{
   position:absolute;bottom:2.5rem;
   display:flex;flex-direction:column;align-items:center;gap:0.5rem;
@@ -86,18 +86,18 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);ove
 }
 .scroll-line{
   width:1px;height:44px;
-  background:linear-gradient(to bottom,var(--rose),transparent);
+  background:linear-gradient(to bottom,rgba(180,180,190,0.4),transparent);
   animation:linePulse 2.2s ease-in-out infinite;
 }
-@keyframes linePulse{0%,100%{opacity:0.4;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.2)}}
+@keyframes linePulse{0%,100%{opacity:0.3;transform:scaleY(1)}50%{opacity:0.7;transform:scaleY(1.2)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 
-#flower-container{width:260px;height:300px;margin-bottom:1.5rem;opacity:1}
+#flower-container{width:260px;height:300px;margin-bottom:1.5rem;opacity:1;filter:grayscale(0.4) opacity(0.75)}
 #hero-flower{width:100%;height:100%;overflow:visible}
 
-#flower-grow{min-height:400vh;position:relative;background:linear-gradient(to bottom,var(--cream),#fef5f0 30%,#fdf0f5 70%,var(--cream))}
+#flower-grow{min-height:400vh;position:relative;background:linear-gradient(to bottom,var(--cream),#f8f6f4 30%,#f5f3f2 70%,var(--cream))}
 .sticky-wrap{position:sticky;top:0;height:100vh;display:flex;align-items:center;justify-content:center}
-.grow-scene{position:relative;width:340px;height:500px}
+.grow-scene{position:relative;width:340px;height:500px;filter:grayscale(0.35) opacity(0.8)}
 #grow-svg{width:100%;height:100%;overflow:visible}
 .bloom-label{
   position:absolute;bottom:-2.5rem;left:50%;transform:translateX(-50%);
@@ -107,7 +107,7 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);ove
 
 #home-nav{padding:5rem 2rem 4rem;text-align:center}
 .nav-eyebrow{font-size:0.68rem;letter-spacing:0.38em;text-transform:uppercase;color:var(--text-light);margin-bottom:1rem}
-.nav-heading{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3rem);font-weight:300;margin-bottom:3.5rem}
+.nav-heading{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3rem);font-weight:300;margin-bottom:3.5rem;color:var(--text-mid)}
 .nav-cards{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;max-width:960px;margin:0 auto}
 .nav-card{
   flex:1;min-width:240px;max-width:290px;
@@ -118,6 +118,14 @@ body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--text);ove
   display:flex;flex-direction:column;align-items:center;gap:1.2rem;
 }
 .nav-card:hover{transform:translateY(-8px);box-shadow:0 18px 48px rgba(180,130,130,0.16)}
+.nav-card.locked{
+  cursor:default;
+  filter:grayscale(0.7) opacity(0.45);
+  pointer-events:none;
+  box-shadow:none;
+  border-color:rgba(180,180,180,0.12);
+}
+.nav-card.locked:hover{transform:none;box-shadow:none}
 .card-icon{font-size:2.4rem;line-height:1}
 .card-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:400}
 .card-desc{font-size:0.76rem;color:var(--text-light);letter-spacing:0.05em;line-height:1.7;text-align:center}
@@ -233,212 +241,6 @@ textarea{resize:vertical;min-height:120px}
 .modal-msg{font-size:0.82rem;color:var(--text-light);line-height:1.6;margin-bottom:1.8rem}
 .modal-actions{display:flex;gap:0.75rem;justify-content:center}
 
-.album-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.2rem;margin-bottom:3rem}
-.mem-card{aspect-ratio:3/4;border-radius:18px;cursor:pointer;perspective:1200px;position:relative}
-.mem-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform 0.7s cubic-bezier(0.4,0,0.2,1)}
-.mem-card.flipped .mem-inner{transform:rotateY(180deg)}
-.mem-front,.mem-back{position:absolute;inset:0;backface-visibility:hidden;border-radius:18px;border:1px solid rgba(212,165,165,0.15);box-shadow:0 6px 24px rgba(180,130,130,0.1);overflow:hidden}
-.mem-front{background:var(--white);display:flex;flex-direction:column}
-.mem-front img{width:100%;flex:1;object-fit:cover}
-.mem-text-only{width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:1.5rem;font-family:'Cormorant Garamond',serif;font-size:1.05rem;line-height:1.6;text-align:center;color:var(--text);background:linear-gradient(135deg,#fff8f8,#f8f4ff)}
-.mem-caption-strip{padding:0.6rem 0.9rem;font-size:0.73rem;color:var(--text-light);border-top:1px solid rgba(212,165,165,0.12);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mem-date-badge{position:absolute;top:0.6rem;right:0.6rem;background:rgba(255,255,255,0.88);backdrop-filter:blur(6px);border-radius:8px;padding:0.2rem 0.55rem;font-size:0.62rem;color:var(--text-light)}
-
-/* FIXED: mem-back is now scrollable with a sticky flip-back button */
-.mem-back{
-  transform:rotateY(180deg);
-  background:linear-gradient(135deg,#fef0f0,#f5f0ff);
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:flex-start;
-  padding:1.5rem 1.5rem 0;
-  gap:0.75rem;text-align:center;
-  overflow-y:auto;
-}
-.mem-back-text{font-family:'Cormorant Garamond',serif;font-size:1rem;line-height:1.65;color:var(--text);flex-shrink:0}
-.mem-back-date{font-size:0.68rem;letter-spacing:0.15em;color:var(--text-light);text-transform:uppercase;flex-shrink:0}
-.mem-back-flip-anchor{
-  position:sticky;bottom:0;
-  width:calc(100% + 3rem);margin-left:-1.5rem;
-  display:flex;justify-content:center;
-  padding:0.9rem 0 0.75rem;
-  background:linear-gradient(transparent,rgba(248,240,255,0.97) 45%);
-  flex-shrink:0;
-  margin-top:auto;
-}
-
-.mem-delete-btn{position:absolute;top:0.5rem;left:0.5rem;z-index:5;width:26px;height:26px;border-radius:50%;border:none;cursor:pointer;background:rgba(255,255,255,0.88);backdrop-filter:blur(4px);color:#b07070;font-size:0.75rem;line-height:1;display:flex;align-items:center;justify-content:center;transition:background 0.2s,color 0.2s;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
-.mem-delete-btn:hover{background:#fff0f0;color:#903030}
-.mem-flip-btn{position:absolute;bottom:0.6rem;right:0.6rem;background:rgba(255,255,255,0.88);backdrop-filter:blur(4px);border:1px solid rgba(212,165,165,0.35);border-radius:20px;padding:0.25rem 0.7rem;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--dusty);cursor:pointer;font-family:'Jost',sans-serif;transition:background 0.2s,color 0.2s}
-.mem-flip-btn:hover{background:var(--blush);color:var(--deep)}
-.mem-back .mem-flip-btn{position:relative;bottom:auto;right:auto}
-
-#fullscreen-viewer{position:fixed;inset:0;background:rgba(20,12,12,0.95);z-index:300;display:none;align-items:center;justify-content:center}
-#fullscreen-viewer.open{display:flex}
-#fullscreen-img{max-width:82vw;max-height:82vh;border-radius:12px;object-fit:contain;transition:opacity 0.22s ease}
-#fullscreen-img.fading{opacity:0}
-.fs-close{position:absolute;top:1.5rem;right:1.8rem;background:none;border:none;color:rgba(255,255,255,0.7);font-size:1.8rem;cursor:pointer;transition:color 0.2s;z-index:2}
-.fs-close:hover{color:white}
-.fs-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.1);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.15);border-radius:50%;width:46px;height:46px;display:flex;align-items:center;justify-content:center;color:white;font-size:1.2rem;cursor:pointer;transition:background 0.2s;z-index:2}
-.fs-nav:hover{background:rgba(255,255,255,0.22)}
-#fs-prev{left:1.5rem}
-#fs-next{right:1.5rem}
-.fs-counter{position:absolute;bottom:1.8rem;left:50%;transform:translateX(-50%);font-size:0.7rem;letter-spacing:0.2em;color:rgba(255,255,255,0.5);font-family:'Jost',sans-serif}
-.fs-dots{position:absolute;bottom:3.4rem;left:50%;transform:translateX(-50%);display:flex;gap:0.4rem}
-.fs-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.3);transition:background 0.2s,transform 0.2s}
-.fs-dot.active{background:white;transform:scale(1.3)}
-
-.roadmap-wrap{position:relative;max-width:680px;margin:0 auto 4rem}
-.road-path{position:absolute;left:50%;top:20px;bottom:20px;width:3px;background:linear-gradient(to bottom,var(--blush),var(--lavender),var(--sage));transform:translateX(-50%);border-radius:2px;z-index:0}
-.roadmap-stops{position:relative;z-index:1;display:flex;flex-direction:column}
-.road-stop{display:flex;align-items:flex-start;gap:1.5rem;padding:1.2rem 0;position:relative}
-.road-stop:nth-child(odd){flex-direction:row;padding-right:calc(50% + 2rem);justify-content:flex-end}
-.road-stop:nth-child(even){flex-direction:row;padding-left:calc(50% + 2rem);justify-content:flex-start}
-.stop-node{position:absolute;left:50%;top:1.8rem;transform:translateX(-50%);width:42px;height:42px;border-radius:50%;border:2.5px solid var(--rose);background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:pointer;transition:background 0.3s,border-color 0.3s;z-index:2;flex-shrink:0}
-.stop-node.done{background:var(--rose);border-color:var(--dusty)}
-.stop-node.done::after{content:'✓';color:white;font-size:0.85rem;font-weight:bold;font-family:'Jost',sans-serif}
-.stop-card{background:var(--white);border-radius:16px;padding:1.2rem 1.4rem;border:1px solid rgba(212,165,165,0.18);box-shadow:0 4px 16px rgba(180,130,130,0.07);transition:box-shadow 0.2s;max-width:260px;width:100%}
-.stop-card:hover{box-shadow:0 8px 28px rgba(180,130,130,0.13)}
-.stop-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;margin-bottom:0.3rem}
-.stop-title.done-text{text-decoration:line-through;color:var(--text-light)}
-.stop-desc{font-size:0.78rem;color:var(--text-light);line-height:1.55;margin-bottom:0.4rem}
-.stop-links{display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:0.4rem}
-.stop-link{font-size:0.68rem;color:var(--dusty);text-decoration:none;border:1px solid rgba(212,165,165,0.28);border-radius:20px;padding:0.18rem 0.6rem;transition:background 0.2s}
-.stop-link:hover{background:var(--blush)}
-.stop-actions{display:flex;gap:0.4rem;justify-content:flex-end;margin-top:0.5rem}
-
-.bucket-progress-wrap{max-width:680px;margin:0 auto 2.5rem;background:var(--white);border-radius:16px;padding:1.2rem 1.8rem;border:1px solid rgba(212,165,165,0.18);box-shadow:0 4px 16px rgba(180,130,130,0.07)}
-.bucket-progress-label{display:flex;justify-content:space-between;align-items:center;font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-light);margin-bottom:0.75rem}
-.bucket-progress-label span:last-child{color:var(--rose)}
-.bucket-progress-bar-bg{height:5px;background:rgba(212,165,165,0.15);border-radius:3px;overflow:hidden}
-.bucket-progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--rose),var(--dusty));border-radius:3px;transition:width 0.6s cubic-bezier(0.4,0,0.2,1)}
-
-.gifts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.4rem;margin-bottom:3rem}
-.gift-card{
-  background:var(--white);border-radius:20px;
-  border:1px solid rgba(212,165,165,0.18);
-  box-shadow:0 4px 20px rgba(180,130,130,0.07);
-  overflow:hidden;position:relative;
-  transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1),box-shadow 0.3s;
-}
-.gift-card:hover{transform:translateY(-4px);box-shadow:0 12px 36px rgba(180,130,130,0.14)}
-.gift-card-top{
-  background:linear-gradient(135deg,#fdf0f5,#f5f0ff);
-  padding:1.4rem 1.6rem 1.1rem;
-  display:flex;justify-content:space-between;align-items:flex-start;
-  border-bottom:1px solid rgba(212,165,165,0.1);
-}
-.gift-type-badge{
-  font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;
-  color:var(--dusty);background:rgba(212,165,165,0.12);
-  padding:0.22rem 0.65rem;border-radius:20px;
-  border:1px solid rgba(212,165,165,0.22);
-}
-.gift-from-badge{
-  font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;
-  color:var(--text-light);
-}
-.gift-icon{font-size:2rem;line-height:1;margin-bottom:0.5rem;display:block}
-.gift-title{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.2rem;font-weight:400;
-  color:var(--text);margin-bottom:0.3rem;
-}
-.gift-body{padding:1.2rem 1.6rem}
-.gift-message{
-  font-family:'Cormorant Garamond',serif;
-  font-size:0.98rem;line-height:1.75;
-  color:var(--text-mid);
-  max-height:80px;overflow:hidden;position:relative;
-  transition:max-height 0.4s ease;
-}
-.gift-message.expanded{max-height:600px}
-.gift-message-fade{
-  position:absolute;bottom:0;left:0;right:0;height:36px;
-  background:linear-gradient(transparent,white);
-  pointer-events:none;transition:opacity 0.3s;
-}
-.gift-footer{
-  padding:0.75rem 1.6rem 1.2rem;
-  display:flex;justify-content:space-between;align-items:center;
-  flex-wrap:wrap;gap:0.5rem;
-}
-.gift-date{font-size:0.66rem;color:var(--text-light)}
-.gift-preview-thumb{
-  width:100%;height:180px;object-fit:cover;
-  display:block;border-bottom:1px solid rgba(212,165,165,0.1);
-  cursor:pointer;transition:opacity 0.2s;
-}
-.gift-preview-thumb:hover{opacity:0.88}
-.gift-preview-audio{
-  width:100%;padding:1rem 1.2rem;
-  background:rgba(212,165,165,0.06);
-  border-bottom:1px solid rgba(212,165,165,0.1);
-  box-sizing:border-box;
-}
-.gift-preview-audio audio{width:100%;display:block}
-.gift-preview-video{
-  width:100%;background:#111;
-  border-bottom:1px solid rgba(212,165,165,0.1);
-  position:relative;overflow:hidden;
-}
-.gift-preview-video video{width:100%;max-height:200px;display:block;object-fit:contain}
-.gift-open-btn{
-  display:flex;align-items:center;justify-content:center;gap:0.5rem;
-  width:100%;padding:0.95rem 1.6rem;
-  background:rgba(212,165,165,0.06);
-  border-bottom:1px solid rgba(212,165,165,0.1);
-  border:none;cursor:pointer;
-  font-family:'Jost',sans-serif;font-size:0.75rem;
-  letter-spacing:0.18em;text-transform:uppercase;
-  color:var(--dusty);transition:background 0.2s,color 0.2s;
-  text-align:center;text-decoration:none;
-}
-.gift-open-btn:hover{background:var(--blush);color:var(--deep)}
-.gift-delete-btn{position:absolute;top:0.6rem;right:0.6rem;z-index:3;width:26px;height:26px;border-radius:50%;border:none;cursor:pointer;background:rgba(255,255,255,0.88);backdrop-filter:blur(4px);color:#b07070;font-size:0.75rem;display:flex;align-items:center;justify-content:center;transition:background 0.2s;box-shadow:0 1px 4px rgba(0,0,0,0.08)}
-.gift-delete-btn:hover{background:#fff0f0;color:#903030}
-
-#gift-viewer{
-  position:fixed;inset:0;z-index:450;
-  background:rgba(18,10,10,0.92);
-  backdrop-filter:blur(8px);
-  display:none;flex-direction:column;
-  align-items:center;justify-content:center;
-}
-#gift-viewer.open{display:flex}
-#gift-viewer-close{
-  position:absolute;top:1.2rem;right:1.6rem;
-  background:none;border:none;color:rgba(255,255,255,0.7);
-  font-size:1.8rem;cursor:pointer;z-index:2;
-  transition:color 0.2s;line-height:1;
-}
-#gift-viewer-close:hover{color:#fff}
-#gift-viewer-download{
-  position:absolute;top:1.2rem;left:1.6rem;
-  font-family:'Jost',sans-serif;font-size:0.68rem;
-  letter-spacing:0.2em;text-transform:uppercase;
-  color:rgba(255,255,255,0.55);text-decoration:none;
-  border:1px solid rgba(255,255,255,0.2);
-  border-radius:20px;padding:0.4rem 1rem;
-  transition:color 0.2s,border-color 0.2s;
-}
-#gift-viewer-download:hover{color:#fff;border-color:rgba(255,255,255,0.5)}
-#gift-viewer-title{
-  position:absolute;bottom:1.4rem;left:50%;transform:translateX(-50%);
-  font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;
-  color:rgba(255,255,255,0.45);white-space:nowrap;max-width:80vw;
-  overflow:hidden;text-overflow:ellipsis;
-}
-#gift-viewer-inner{
-  width:90vw;max-width:1100px;
-  height:82vh;
-  display:flex;align-items:center;justify-content:center;
-  position:relative;
-}
-#gift-viewer-inner img{max-width:100%;max-height:82vh;object-fit:contain;border-radius:8px;box-shadow:0 8px 48px rgba(0,0,0,0.5)}
-#gift-viewer-inner video{max-width:100%;max-height:82vh;border-radius:8px;box-shadow:0 8px 48px rgba(0,0,0,0.5);background:#000}
-#gift-viewer-inner audio{width:min(480px,86vw)}
-#gift-viewer-inner iframe{width:100%;height:82vh;border:none;border-radius:8px;background:#fff;box-shadow:0 8px 48px rgba(0,0,0,0.5)}
-
 #toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--cream);padding:0.7rem 1.5rem;border-radius:50px;font-size:0.78rem;letter-spacing:0.08em;opacity:0;transition:all 0.3s;z-index:500;pointer-events:none;white-space:nowrap}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
@@ -454,14 +256,6 @@ footer{text-align:center;padding:3rem 1rem;font-size:0.7rem;letter-spacing:0.18e
 @media(max-width:640px){
   .nav-cards{flex-direction:column;align-items:center}
   .nav-card{max-width:100%;width:100%}
-  .album-grid,.gifts-grid{grid-template-columns:repeat(2,1fr)}
-  .road-path{left:20px;transform:none}
-  .road-stop:nth-child(odd),.road-stop:nth-child(even){flex-direction:column;padding:1rem 0 1rem 3.5rem;justify-content:flex-start}
-  .stop-node{left:0;top:1.4rem;transform:none}
-  .stop-card{max-width:100%}
-  #fs-prev{left:0.5rem}
-  #fs-next{right:0.5rem}
-  #fullscreen-img{max-width:92vw;max-height:74vh}
 }
 </style>
 </head>
@@ -477,32 +271,32 @@ footer{text-align:center;padding:3rem 1rem;font-size:0.7rem;letter-spacing:0.18e
     <div id="flower-container">
       <svg id="hero-flower" viewBox="0 0 260 360" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <radialGradient id="hg1" cx="45%" cy="60%" r="58%"><stop offset="0%" stop-color="#fce0df"/><stop offset="100%" stop-color="#e89090"/></radialGradient>
-          <radialGradient id="hg2" cx="45%" cy="60%" r="58%"><stop offset="0%" stop-color="#f9d0d0"/><stop offset="100%" stop-color="#e07878"/></radialGradient>
-          <radialGradient id="hg3" cx="45%" cy="60%" r="58%"><stop offset="0%" stop-color="#fdeaea"/><stop offset="100%" stop-color="#eea0a0"/></radialGradient>
-          <radialGradient id="hgc" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fef2c0"/><stop offset="100%" stop-color="#f0c050"/></radialGradient>
+          <radialGradient id="hg1" cx="45%" cy="60%" r="58%"><stop offset="0%" stop-color="#e8e0df"/><stop offset="100%" stop-color="#b89090"/></radialGradient>
+          <radialGradient id="hg2" cx="45%" cy="60%" r="58%"><stop offset="0%" stop-color="#e0d0d0"/><stop offset="100%" stop-color="#a87878"/></radialGradient>
+          <radialGradient id="hg3" cx="45%" cy="60%" r="58%"><stop offset="0%" stop-color="#edeaea"/><stop offset="100%" stop-color="#c0a0a0"/></radialGradient>
+          <radialGradient id="hgc" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#e8e4d8"/><stop offset="100%" stop-color="#c0b080"/></radialGradient>
         </defs>
-        <path d="M130 340 Q127 290 130 240" stroke="#8faa82" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-        <path d="M129 295 Q100 278 96 260 Q113 268 129 283" fill="#7a9e6e" opacity="0.9"/>
-        <path d="M131 312 Q160 293 165 274 Q148 283 131 300" fill="#7a9e6e" opacity="0.85"/>
-        <ellipse cx="130" cy="196" rx="18" ry="36" fill="url(#hg1)" transform="rotate(-55 130 232)" opacity="0.7"/>
-        <ellipse cx="130" cy="196" rx="18" ry="36" fill="url(#hg1)" transform="rotate(-28 130 232)" opacity="0.75"/>
-        <ellipse cx="130" cy="196" rx="18" ry="36" fill="url(#hg1)" transform="rotate(0 130 232)" opacity="0.78"/>
-        <ellipse cx="130" cy="196" rx="18" ry="36" fill="url(#hg1)" transform="rotate(28 130 232)" opacity="0.75"/>
-        <ellipse cx="130" cy="196" rx="18" ry="36" fill="url(#hg1)" transform="rotate(55 130 232)" opacity="0.7"/>
-        <ellipse cx="130" cy="202" rx="14" ry="29" fill="url(#hg2)" transform="rotate(-42 130 230)" opacity="0.88"/>
+        <path d="M130 340 Q127 290 130 240" stroke="#9aaa92" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <path d="M129 295 Q100 278 96 260 Q113 268 129 283" fill="#9aaa92" opacity="0.7"/>
+        <path d="M131 312 Q160 293 165 274 Q148 283 131 300" fill="#9aaa92" opacity="0.65"/>
+        <ellipse cx="130" cy="196" rx="18" ry="36" fill="url(#hg1)" transform="rotate(-55 130 232)" opacity="0.6"/>
+        <ellipse cx="130" cy="196" rx="18" ry="36" fill="url(#hg1)" transform="rotate(-28 130 232)" opacity="0.65"/>
+        <ellipse cx="130" cy="196" rx="18" ry="36" fill="url(#hg1)" transform="rotate(0 130 232)" opacity="0.68"/>
+        <ellipse cx="130" cy="196" rx="18" ry="36" fill="url(#hg1)" transform="rotate(28 130 232)" opacity="0.65"/>
+        <ellipse cx="130" cy="196" rx="18" ry="36" fill="url(#hg1)" transform="rotate(55 130 232)" opacity="0.6"/>
+        <ellipse cx="130" cy="202" rx="14" ry="29" fill="url(#hg2)" transform="rotate(-42 130 230)" opacity="0.78"/>
         <ellipse cx="130" cy="202" rx="14" ry="29" fill="url(#hg2)" transform="rotate(-14 130 230)"/>
         <ellipse cx="130" cy="202" rx="14" ry="29" fill="url(#hg2)" transform="rotate(14 130 230)"/>
-        <ellipse cx="130" cy="202" rx="14" ry="29" fill="url(#hg2)" transform="rotate(42 130 230)" opacity="0.88"/>
+        <ellipse cx="130" cy="202" rx="14" ry="29" fill="url(#hg2)" transform="rotate(42 130 230)" opacity="0.78"/>
         <ellipse cx="130" cy="208" rx="10" ry="21" fill="url(#hg3)" transform="rotate(-26 130 228)"/>
         <ellipse cx="130" cy="208" rx="10" ry="21" fill="url(#hg3)" transform="rotate(0 130 228)"/>
         <ellipse cx="130" cy="208" rx="10" ry="21" fill="url(#hg3)" transform="rotate(26 130 228)"/>
         <circle cx="130" cy="228" r="13" fill="url(#hgc)"/>
-        <circle cx="126" cy="224" r="2.5" fill="#c89020" opacity="0.85"/>
-        <circle cx="134" cy="223" r="2" fill="#c89020" opacity="0.85"/>
-        <circle cx="130" cy="221" r="2" fill="#c89020" opacity="0.85"/>
-        <circle cx="128" cy="229" r="1.8" fill="#a07010" opacity="0.6"/>
-        <circle cx="133" cy="228" r="1.8" fill="#a07010" opacity="0.6"/>
+        <circle cx="126" cy="224" r="2.5" fill="#a09020" opacity="0.7"/>
+        <circle cx="134" cy="223" r="2" fill="#a09020" opacity="0.7"/>
+        <circle cx="130" cy="221" r="2" fill="#a09020" opacity="0.7"/>
+        <circle cx="128" cy="229" r="1.8" fill="#807010" opacity="0.5"/>
+        <circle cx="133" cy="228" r="1.8" fill="#807010" opacity="0.5"/>
       </svg>
     </div>
     <h1 class="hero-monogram">A &amp; S</h1>
@@ -515,37 +309,37 @@ footer{text-align:center;padding:3rem 1rem;font-size:0.7rem;letter-spacing:0.18e
     <div class="scroll-cue"><div class="scroll-line"></div><span>scroll</span></div>
   </section>
 
-  <section id="flower-grow">
+  <section id="flower-grow" style="min-height:400vh;position:relative;background:linear-gradient(to bottom,var(--cream),#f5f3f2 30%,#f2f0ef 70%,var(--cream))">
     <div class="sticky-wrap">
       <div class="grow-scene">
         <svg id="grow-svg" viewBox="0 0 340 500" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <radialGradient id="gA" cx="42%" cy="62%" r="60%"><stop offset="0%" stop-color="#fce0df"/><stop offset="100%" stop-color="#e89090"/></radialGradient>
-            <radialGradient id="gB" cx="42%" cy="62%" r="60%"><stop offset="0%" stop-color="#f9cccc"/><stop offset="100%" stop-color="#e07878"/></radialGradient>
-            <radialGradient id="gC" cx="42%" cy="62%" r="60%"><stop offset="0%" stop-color="#fdeaea"/><stop offset="100%" stop-color="#eeaaaa"/></radialGradient>
-            <radialGradient id="gCtr" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fef2c0"/><stop offset="100%" stop-color="#f0c050"/></radialGradient>
+            <radialGradient id="gA" cx="42%" cy="62%" r="60%"><stop offset="0%" stop-color="#e0d8d8"/><stop offset="100%" stop-color="#b89090"/></radialGradient>
+            <radialGradient id="gB" cx="42%" cy="62%" r="60%"><stop offset="0%" stop-color="#d8cccc"/><stop offset="100%" stop-color="#a87878"/></radialGradient>
+            <radialGradient id="gC" cx="42%" cy="62%" r="60%"><stop offset="0%" stop-color="#e8e2e2"/><stop offset="100%" stop-color="#c0aaaa"/></radialGradient>
+            <radialGradient id="gCtr" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#e8e4d8"/><stop offset="100%" stop-color="#c0b080"/></radialGradient>
           </defs>
-          <path id="s-stem" d="M170 480 Q166 430 168 370 Q169 345 170 320" stroke="#8faa82" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="175" stroke-dashoffset="175"/>
+          <path id="s-stem" d="M170 480 Q166 430 168 370 Q169 345 170 320" stroke="#9aaa92" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="175" stroke-dashoffset="175"/>
           <g id="s-sepal" opacity="0">
-            <path d="M160 348 Q153 330 160 316" stroke="#7a9e6e" stroke-width="2.2" fill="none" opacity="0.75"/>
-            <path d="M180 348 Q187 330 180 316" stroke="#7a9e6e" stroke-width="2.2" fill="none" opacity="0.75"/>
-            <path d="M170 350 Q162 335 164 318" stroke="#7a9e6e" stroke-width="1.5" fill="none" opacity="0.5"/>
-            <path d="M170 350 Q178 335 176 318" stroke="#7a9e6e" stroke-width="1.5" fill="none" opacity="0.5"/>
+            <path d="M160 348 Q153 330 160 316" stroke="#9aaa92" stroke-width="2.2" fill="none" opacity="0.65"/>
+            <path d="M180 348 Q187 330 180 316" stroke="#9aaa92" stroke-width="2.2" fill="none" opacity="0.65"/>
+            <path d="M170 350 Q162 335 164 318" stroke="#9aaa92" stroke-width="1.5" fill="none" opacity="0.4"/>
+            <path d="M170 350 Q178 335 176 318" stroke="#9aaa92" stroke-width="1.5" fill="none" opacity="0.4"/>
           </g>
           <g id="s-ll" opacity="0">
-            <path d="M168 405 Q128 380 120 358 Q144 367 168 388" fill="#7a9e6e"/>
-            <path d="M168 405 Q134 376 126 352" stroke="#5a8050" stroke-width="1.2" fill="none" opacity="0.45"/>
+            <path d="M168 405 Q128 380 120 358 Q144 367 168 388" fill="#9aaa92"/>
+            <path d="M168 405 Q134 376 126 352" stroke="#7a8a72" stroke-width="1.2" fill="none" opacity="0.35"/>
           </g>
           <g id="s-lr" opacity="0">
-            <path d="M172 425 Q212 398 220 374 Q196 385 172 408" fill="#7a9e6e"/>
-            <path d="M172 425 Q206 394 214 370" stroke="#5a8050" stroke-width="1.2" fill="none" opacity="0.45"/>
+            <path d="M172 425 Q212 398 220 374 Q196 385 172 408" fill="#9aaa92"/>
+            <path d="M172 425 Q206 394 214 370" stroke="#7a8a72" stroke-width="1.2" fill="none" opacity="0.35"/>
           </g>
-          <g id="g-op1" opacity="0"><ellipse cx="170" cy="274" rx="21" ry="46" fill="url(#gA)" transform="rotate(-60 170 322)" opacity="0.68"/></g>
-          <g id="g-op2" opacity="0"><ellipse cx="170" cy="274" rx="21" ry="46" fill="url(#gA)" transform="rotate(-36 170 322)" opacity="0.72"/></g>
-          <g id="g-op3" opacity="0"><ellipse cx="170" cy="274" rx="21" ry="46" fill="url(#gA)" transform="rotate(-12 170 322)" opacity="0.76"/></g>
-          <g id="g-op4" opacity="0"><ellipse cx="170" cy="274" rx="21" ry="46" fill="url(#gA)" transform="rotate(12 170 322)" opacity="0.76"/></g>
-          <g id="g-op5" opacity="0"><ellipse cx="170" cy="274" rx="21" ry="46" fill="url(#gA)" transform="rotate(36 170 322)" opacity="0.72"/></g>
-          <g id="g-op6" opacity="0"><ellipse cx="170" cy="274" rx="21" ry="46" fill="url(#gA)" transform="rotate(60 170 322)" opacity="0.68"/></g>
+          <g id="g-op1" opacity="0"><ellipse cx="170" cy="274" rx="21" ry="46" fill="url(#gA)" transform="rotate(-60 170 322)" opacity="0.58"/></g>
+          <g id="g-op2" opacity="0"><ellipse cx="170" cy="274" rx="21" ry="46" fill="url(#gA)" transform="rotate(-36 170 322)" opacity="0.62"/></g>
+          <g id="g-op3" opacity="0"><ellipse cx="170" cy="274" rx="21" ry="46" fill="url(#gA)" transform="rotate(-12 170 322)" opacity="0.66"/></g>
+          <g id="g-op4" opacity="0"><ellipse cx="170" cy="274" rx="21" ry="46" fill="url(#gA)" transform="rotate(12 170 322)" opacity="0.66"/></g>
+          <g id="g-op5" opacity="0"><ellipse cx="170" cy="274" rx="21" ry="46" fill="url(#gA)" transform="rotate(36 170 322)" opacity="0.62"/></g>
+          <g id="g-op6" opacity="0"><ellipse cx="170" cy="274" rx="21" ry="46" fill="url(#gA)" transform="rotate(60 170 322)" opacity="0.58"/></g>
           <g id="g-mp1" opacity="0"><ellipse cx="170" cy="283" rx="16" ry="36" fill="url(#gB)" transform="rotate(-50 170 320)"/></g>
           <g id="g-mp2" opacity="0"><ellipse cx="170" cy="283" rx="16" ry="36" fill="url(#gB)" transform="rotate(-22 170 320)"/></g>
           <g id="g-mp3" opacity="0"><ellipse cx="170" cy="283" rx="16" ry="36" fill="url(#gB)" transform="rotate(6 170 320)"/></g>
@@ -557,25 +351,25 @@ footer{text-align:center;padding:3rem 1rem;font-size:0.7rem;letter-spacing:0.18e
           <g id="g-ip4" opacity="0"><ellipse cx="170" cy="293" rx="11" ry="25" fill="url(#gC)" transform="rotate(46 170 318)"/></g>
           <g id="g-ctr" opacity="0">
             <circle cx="170" cy="318" r="19" fill="url(#gCtr)"/>
-            <circle cx="164" cy="313" r="3.2" fill="#c89010" opacity="0.9"/>
-            <circle cx="176" cy="313" r="2.8" fill="#c89010" opacity="0.9"/>
-            <circle cx="170" cy="310" r="2.8" fill="#c89010" opacity="0.9"/>
-            <circle cx="162" cy="320" r="2.2" fill="#a07010" opacity="0.65"/>
-            <circle cx="172" cy="322" r="2.2" fill="#a07010" opacity="0.65"/>
-            <circle cx="178" cy="318" r="2.2" fill="#a07010" opacity="0.65"/>
-            <circle cx="166" cy="324" r="1.8" fill="#a07010" opacity="0.5"/>
+            <circle cx="164" cy="313" r="3.2" fill="#a09010" opacity="0.75"/>
+            <circle cx="176" cy="313" r="2.8" fill="#a09010" opacity="0.75"/>
+            <circle cx="170" cy="310" r="2.8" fill="#a09010" opacity="0.75"/>
+            <circle cx="162" cy="320" r="2.2" fill="#807010" opacity="0.5"/>
+            <circle cx="172" cy="322" r="2.2" fill="#807010" opacity="0.5"/>
+            <circle cx="178" cy="318" r="2.2" fill="#807010" opacity="0.5"/>
+            <circle cx="166" cy="324" r="1.8" fill="#807010" opacity="0.4"/>
           </g>
-          <path id="g-branch" d="M168 372 Q196 352 216 336" stroke="#8faa82" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-dasharray="60" stroke-dashoffset="60" opacity="0"/>
+          <path id="g-branch" d="M168 372 Q196 352 216 336" stroke="#9aaa92" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-dasharray="60" stroke-dashoffset="60" opacity="0"/>
           <g id="g-bud" opacity="0">
-            <ellipse cx="216" cy="316" rx="9" ry="20" fill="url(#gC)" transform="rotate(-18 216 336)" opacity="0.78"/>
-            <ellipse cx="216" cy="316" rx="9" ry="20" fill="url(#gB)" transform="rotate(2 216 336)" opacity="0.85"/>
-            <ellipse cx="216" cy="316" rx="9" ry="20" fill="url(#gC)" transform="rotate(22 216 336)" opacity="0.72"/>
+            <ellipse cx="216" cy="316" rx="9" ry="20" fill="url(#gC)" transform="rotate(-18 216 336)" opacity="0.68"/>
+            <ellipse cx="216" cy="316" rx="9" ry="20" fill="url(#gB)" transform="rotate(2 216 336)" opacity="0.75"/>
+            <ellipse cx="216" cy="316" rx="9" ry="20" fill="url(#gC)" transform="rotate(22 216 336)" opacity="0.62"/>
             <circle cx="216" cy="330" r="7" fill="url(#gCtr)"/>
-            <circle cx="213" cy="327" r="2" fill="#c89010" opacity="0.8"/>
-            <circle cx="219" cy="327" r="1.8" fill="#c89010" opacity="0.8"/>
+            <circle cx="213" cy="327" r="2" fill="#a09010" opacity="0.7"/>
+            <circle cx="219" cy="327" r="1.8" fill="#a09010" opacity="0.7"/>
           </g>
         </svg>
-        <div class="bloom-label" id="bloom-label">blooming for you</div>
+        <div class="bloom-label" id="bloom-label">still here</div>
       </div>
     </div>
   </section>
@@ -589,17 +383,17 @@ footer{text-align:center;padding:3rem 1rem;font-size:0.7rem;letter-spacing:0.18e
         <div class="card-title">Letters</div>
         <div class="card-desc">words we mean to keep forever</div>
       </div>
-      <div class="nav-card" onclick="goTo('memories')">
+      <div class="nav-card locked">
         <div class="card-icon">&#127902;</div>
         <div class="card-title">Memories</div>
         <div class="card-desc">moments we never want to forget</div>
       </div>
-      <div class="nav-card" onclick="goTo('bucket')">
+      <div class="nav-card locked">
         <div class="card-icon">&#127807;</div>
         <div class="card-title">Bucket List</div>
         <div class="card-desc">everything we want to do together</div>
       </div>
-      <div class="nav-card" onclick="goTo('gifts')">
+      <div class="nav-card locked">
         <div class="card-icon">&#127873;</div>
         <div class="card-title">Digital Gifts</div>
         <div class="card-desc">files, songs, photos, anything for you</div>
@@ -617,66 +411,6 @@ footer{text-align:center;padding:3rem 1rem;font-size:0.7rem;letter-spacing:0.18e
   </div>
   <div class="page-content">
     <div id="letters-grid" class="letters-grid">
-      <div class="loading-dots"><span></span><span></span><span></span></div>
-    </div>
-  </div>
-</div>
-
-<!-- MEMORIES -->
-<div class="page hidden" id="page-memories">
-  <div class="page-hero">
-    <h1 class="page-hero-title">Memories</h1>
-    <p class="page-hero-sub">moments we never want to forget</p>
-  </div>
-  <div class="page-content">
-    <div id="album-grid" class="album-grid">
-      <div class="loading-dots"><span></span><span></span><span></span></div>
-    </div>
-  </div>
-</div>
-
-<div id="fullscreen-viewer">
-  <button class="fs-close" onclick="closeFullscreen()">&#x2715;</button>
-  <button class="fs-nav" id="fs-prev" onclick="slideshowNav(-1)">&#8592;</button>
-  <img id="fullscreen-img" src="" alt="">
-  <button class="fs-nav" id="fs-next" onclick="slideshowNav(1)">&#8594;</button>
-  <div class="fs-dots" id="fs-dots"></div>
-  <div class="fs-counter" id="fs-counter"></div>
-</div>
-
-<!-- BUCKET LIST -->
-<div class="page hidden" id="page-bucket">
-  <div class="page-hero">
-    <h1 class="page-hero-title">Bucket List</h1>
-    <p class="page-hero-sub">everything we want to do together</p>
-  </div>
-  <div class="page-content">
-    <div class="bucket-progress-wrap" id="bucket-progress-wrap" style="display:none">
-      <div class="bucket-progress-label">
-        <span>journey progress</span>
-        <span id="bucket-progress-text">0 of 0</span>
-      </div>
-      <div class="bucket-progress-bar-bg">
-        <div class="bucket-progress-bar-fill" id="bucket-progress-fill" style="width:0%"></div>
-      </div>
-    </div>
-    <div class="roadmap-wrap">
-      <div class="road-path" id="road-path"></div>
-      <div class="roadmap-stops" id="roadmap-stops">
-        <div class="loading-dots"><span></span><span></span><span></span></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- DIGITAL GIFTS -->
-<div class="page hidden" id="page-gifts">
-  <div class="page-hero">
-    <h1 class="page-hero-title">Digital Gifts</h1>
-    <p class="page-hero-sub">files, songs, photos — anything for you</p>
-  </div>
-  <div class="page-content">
-    <div id="gifts-grid" class="gifts-grid">
       <div class="loading-dots"><span></span><span></span><span></span></div>
     </div>
   </div>
@@ -707,127 +441,6 @@ footer{text-align:center;padding:3rem 1rem;font-size:0.7rem;letter-spacing:0.18e
       <button class="btn btn-primary" onclick="submitLetter()">send letter</button>
     </div>
   </div>
-</div>
-
-<!-- MEMORY DRAWER -->
-<div class="drawer" id="drawer-memories">
-  <div class="drawer-handle"></div>
-  <div class="drawer-header">
-    <span class="drawer-title">Add a memory</span>
-    <button class="drawer-close" onclick="closeDrawer()">&#x2715;</button>
-  </div>
-  <div class="drawer-body">
-    <div class="form-row">
-      <div class="form-group">
-        <label>type</label>
-        <select id="mem-type" onchange="toggleMemType()">
-          <option value="photo">photo only</option>
-          <option value="photo-text">photo + message (flip to read)</option>
-          <option value="text">text only</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>date of memory</label>
-        <input type="date" id="mem-date">
-      </div>
-    </div>
-    <div id="mem-photo-area" class="form-group">
-      <label>photo</label>
-      <div class="upload-area" onclick="document.getElementById('mem-photo-input').click()">
-        <input type="file" id="mem-photo-input" accept="image/*" onchange="previewFile(this,'mem-photo-prev')">
-        tap to choose a photo
-        <div class="upload-preview" id="mem-photo-prev"></div>
-      </div>
-    </div>
-    <div id="mem-caption-area" class="form-group">
-      <label>caption / message</label>
-      <textarea id="mem-caption" placeholder="a little note about this moment&#8230;" style="min-height:80px"></textarea>
-    </div>
-    <div class="form-actions">
-      <button class="btn btn-ghost" onclick="closeDrawer()">cancel</button>
-      <button class="btn btn-primary" onclick="submitMemory()">save memory</button>
-    </div>
-  </div>
-</div>
-
-<!-- BUCKET DRAWER -->
-<div class="drawer" id="drawer-bucket">
-  <div class="drawer-handle"></div>
-  <div class="drawer-header">
-    <span class="drawer-title">Add to the journey</span>
-    <button class="drawer-close" onclick="closeDrawer()">&#x2715;</button>
-  </div>
-  <div class="drawer-body">
-    <div class="form-group">
-      <label>dream / goal</label>
-      <input type="text" id="bucket-title" placeholder="e.g. watch the sunrise in Santorini">
-    </div>
-    <div class="form-group">
-      <label>details (optional)</label>
-      <textarea id="bucket-desc" placeholder="notes, ideas, anything&#8230;" style="min-height:70px"></textarea>
-    </div>
-    <div class="form-group">
-      <label>link (optional)</label>
-      <input type="url" id="bucket-link" placeholder="https://&#8230;">
-    </div>
-    <div class="form-group">
-      <label>attach a file or photo (optional)</label>
-      <div class="upload-area" onclick="document.getElementById('bucket-file-input').click()">
-        <input type="file" id="bucket-file-input" onchange="previewFile(this,'bucket-file-prev')">
-        tap to attach
-        <div class="upload-preview" id="bucket-file-prev"></div>
-      </div>
-    </div>
-    <div class="form-actions" style="padding-bottom:1rem">
-      <button class="btn btn-ghost" onclick="closeDrawer()">cancel</button>
-      <button class="btn btn-primary" onclick="submitBucket()">add to journey</button>
-    </div>
-  </div>
-</div>
-
-<!-- GIFTS DRAWER -->
-<div class="drawer" id="drawer-gifts">
-  <div class="drawer-handle"></div>
-  <div class="drawer-header">
-    <span class="drawer-title">Give a digital gift</span>
-    <button class="drawer-close" onclick="closeDrawer()">&#x2715;</button>
-  </div>
-  <div class="drawer-body">
-    <div class="form-row">
-      <div class="form-group">
-        <label>from</label>
-        <select id="gift-author"><option value="A">A</option><option value="S">S</option></select>
-      </div>
-    </div>
-    <div class="form-group">
-      <label>title</label>
-      <input type="text" id="gift-title" placeholder="e.g. our song, a photo I love&#8230;">
-    </div>
-    <div class="form-group">
-      <label>message (optional)</label>
-      <textarea id="gift-message" placeholder="why you&apos;re giving this&#8230;" style="min-height:80px"></textarea>
-    </div>
-    <div class="form-group">
-      <label>file (image, audio, video, pdf, html, anything)</label>
-      <div class="upload-area" onclick="document.getElementById('gift-file-input').click()">
-        <input type="file" id="gift-file-input" accept="image/*,audio/*,video/*,application/pdf,text/html,.html,.htm,*/*" onchange="previewFile(this,'gift-file-prev')">
-        tap to attach a file
-        <div class="upload-preview" id="gift-file-prev"></div>
-      </div>
-    </div>
-    <div class="form-actions" style="padding-bottom:1rem">
-      <button class="btn btn-ghost" onclick="closeDrawer()">cancel</button>
-      <button class="btn btn-primary" onclick="submitGift()">send gift</button>
-    </div>
-  </div>
-</div>
-
-<!-- GIFT VIEWER -->
-<div id="gift-viewer" onclick="if(event.target===this)closeGiftViewer()">
-  <button id="gift-viewer-close" onclick="closeGiftViewer()">&#x2715;</button>
-  <a id="gift-viewer-download" href="#" download target="_blank" rel="noopener">download</a>
-  <div id="gift-viewer-inner"></div>
-  <div id="gift-viewer-title"></div>
 </div>
 
 <!-- CONFIRM MODAL -->
@@ -865,29 +478,6 @@ async function supa(path,opts){
   var t=await r.text();return t?JSON.parse(t):null;
 }
 
-async function uploadToStorage(path,file){
-  var ct=file.type||'application/octet-stream';
-  var safePath=path.split('/').map(function(seg){return encodeURIComponent(seg);}).join('/');
-  var r=await fetch(SUPA_URL+'/storage/v1/object/uploads/'+safePath,{
-    method:'POST',
-    headers:{
-      'apikey':SUPA_KEY,
-      'Authorization':'Bearer '+SUPA_KEY,
-      'Content-Type':ct,
-      'x-upsert':'true',
-      'Cache-Control':'3600'
-    },
-    body:file
-  });
-  if(!r.ok){
-    var errMsg=await r.text().catch(function(){return r.status+' '+r.statusText;});
-    throw new Error(errMsg);
-  }
-  return SUPA_URL+'/storage/v1/object/public/uploads/'+safePath;
-}
-
-function sanitizeName(name){return name.replace(/[^a-zA-Z0-9.\-_]/g,'_');}
-
 function toast(msg,dur){
   dur=dur||2800;
   var el=document.getElementById('toast');
@@ -899,10 +489,6 @@ function esc(s){
   return String(s||'')
     .replace(/&/g,'&amp;').replace(/</g,'&lt;')
     .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function previewFile(input,id){
-  document.getElementById(id).textContent=input.files[0]?input.files[0].name:'';
 }
 
 var confirmResolve=null;
@@ -922,8 +508,8 @@ function showConfirm(title,msg,okLabel){
 
 (function(){
   var START=new Date('2026-02-22');
-  var now=new Date();
-  var diff=Math.floor((now-START)/(1000*60*60*24));
+  var END=new Date('2026-04-26');
+  var diff=Math.floor((END-START)/(1000*60*60*24));
   document.getElementById('countdown-days').textContent=diff.toLocaleString();
   var opts={day:'numeric',month:'long',year:'numeric'};
   document.getElementById('countdown-since').textContent='since '+START.toLocaleDateString('en-GB',opts);
@@ -939,9 +525,6 @@ function goTo(page){
   currentPage=page;
   document.getElementById('fab').classList.add('visible');
   if(page==='letters')loadLetters();
-  if(page==='memories')loadMemories();
-  if(page==='bucket')loadBucket();
-  if(page==='gifts')loadGifts();
 }
 function goHome(){
   document.querySelectorAll('.page').forEach(function(p){p.classList.add('hidden');});
@@ -1079,416 +662,6 @@ async function deleteLetter(id){
   try{
     await supa('letters?id=eq.'+id,{method:'DELETE',headers:{'Prefer':''}});
     toast('deleted');loadLetters();
-  }catch(e){toast('could not delete');}
-}
-
-function toggleMemType(){
-  var t=document.getElementById('mem-type').value;
-  document.getElementById('mem-photo-area').style.display=t==='text'?'none':'block';
-  document.getElementById('mem-caption-area').style.display=t==='photo'?'none':'block';
-}
-toggleMemType();
-
-var slideshowUrls=[];
-var slideshowIndex=0;
-
-async function loadMemories(){
-  var el=document.getElementById('album-grid');
-  el.innerHTML='<div class="loading-dots"><span></span><span></span><span></span></div>';
-  try{
-    var data=await supa('memories?order=memory_date.desc&select=*');
-    slideshowUrls=data.filter(function(m){return m.image_url;}).map(function(m){return m.image_url;});
-    if(!data.length){el.innerHTML='<div class="empty-state" style="grid-column:1/-1">no memories yet — add your first one</div>';return;}
-    el.innerHTML=data.map(function(m){return buildMemCard(m);}).join('');
-  }catch(e){el.innerHTML='<div class="empty-state">could not load memories</div>';}
-}
-
-function buildMemCard(m){
-  var date=m.memory_date?new Date(m.memory_date).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'';
-  var badge=date?'<div class="mem-date-badge">'+date+'</div>':'';
-  var delBtn='<button class="mem-delete-btn" onclick="event.stopPropagation();deleteMemory(\''+m.id+'\')">&#x2715;</button>';
-  var imgIndex=slideshowUrls.indexOf(m.image_url);
-  var front='';
-  if(m.type==='text'){
-    front='<div class="mem-front" style="position:relative">'+delBtn+'<div class="mem-text-only">'+esc(m.caption||'')+'</div></div>';
-  }else if(m.image_url){
-    var cap=(m.type==='photo'&&m.caption)?'<div class="mem-caption-strip">'+esc(m.caption)+'</div>':'';
-    var flipBtn=m.type==='photo-text'
-      ?'<button class="mem-flip-btn" onclick="event.stopPropagation();document.getElementById(\'mc-'+m.id+'\').classList.toggle(\'flipped\')">flip &#x21BA;</button>'
-      :'';
-    front='<div class="mem-front">'+delBtn+'<img src="'+esc(m.image_url)+'" alt="memory" onclick="event.stopPropagation();openFullscreen('+imgIndex+')">'+badge+cap+flipBtn+'</div>';
-  }
-  var back='';
-  if(m.type==='photo-text'){
-    back='<div class="mem-back">'+
-      '<div class="mem-back-text">'+esc(m.caption||'')+'</div>'+
-      '<div class="mem-back-date">'+date+'</div>'+
-      '<div class="mem-back-flip-anchor">'+
-        '<button class="mem-flip-btn" onclick="event.stopPropagation();document.getElementById(\'mc-'+m.id+'\').classList.remove(\'flipped\')">flip back &#x21BA;</button>'+
-      '</div>'+
-    '</div>';
-  }else{
-    back='<div class="mem-back"><div class="mem-back-date">'+date+'</div></div>';
-  }
-  return '<div class="mem-card" id="mc-'+m.id+'"><div class="mem-inner">'+front+back+'</div></div>';
-}
-
-async function submitMemory(){
-  var type=document.getElementById('mem-type').value;
-  var caption=document.getElementById('mem-caption').value.trim();
-  var date=document.getElementById('mem-date').value;
-  var fileInput=document.getElementById('mem-photo-input');
-  var file=fileInput.files[0];
-  if(type!=='text'&&!file){toast('please choose a photo');return;}
-  if(type!=='photo'&&!caption){toast('please add a message');return;}
-  try{
-    var image_url=null;
-    if(file){
-      var path='memories/'+Date.now()+'-'+sanitizeName(file.name);
-      image_url=await uploadToStorage(path,file);
-    }
-    await supa('memories',{method:'POST',body:JSON.stringify({type:type,caption:caption||null,image_url:image_url,memory_date:date||null})});
-    fileInput.value='';
-    document.getElementById('mem-photo-prev').textContent='';
-    document.getElementById('mem-caption').value='';
-    document.getElementById('mem-date').value='';
-    closeDrawer();toast('memory saved \u2661');loadMemories();
-  }catch(e){toast('something went wrong: '+e.message);}
-}
-
-async function deleteMemory(id){
-  var ok=await showConfirm('delete this memory?','this cannot be undone.','delete');
-  if(!ok)return;
-  try{
-    await supa('memories?id=eq.'+id,{method:'DELETE',headers:{'Prefer':''}});
-    toast('deleted');loadMemories();
-  }catch(e){toast('could not delete');}
-}
-
-function openFullscreen(index){
-  if(!slideshowUrls.length)return;
-  slideshowIndex=index>=0?index:0;
-  document.getElementById('fullscreen-viewer').classList.add('open');
-  renderSlide();
-}
-function closeFullscreen(){document.getElementById('fullscreen-viewer').classList.remove('open');}
-function renderSlide(){
-  var img=document.getElementById('fullscreen-img');
-  var total=slideshowUrls.length;
-  var url=slideshowUrls[slideshowIndex];
-  img.classList.add('fading');
-  setTimeout(function(){img.src=url;img.onload=function(){img.classList.remove('fading');};},120);
-  document.getElementById('fs-counter').textContent=(slideshowIndex+1)+' / '+total;
-  document.getElementById('fs-prev').style.display=total>1?'flex':'none';
-  document.getElementById('fs-next').style.display=total>1?'flex':'none';
-  var dotsEl=document.getElementById('fs-dots');
-  if(total<=12){
-    dotsEl.innerHTML='';
-    for(var i=0;i<total;i++){
-      var d=document.createElement('div');
-      d.className='fs-dot'+(i===slideshowIndex?' active':'');
-      (function(idx){d.onclick=function(){slideshowIndex=idx;renderSlide();};})(i);
-      dotsEl.appendChild(d);
-    }
-  }else{dotsEl.innerHTML='';}
-}
-function slideshowNav(dir){var total=slideshowUrls.length;slideshowIndex=(slideshowIndex+dir+total)%total;renderSlide();}
-document.getElementById('fullscreen-viewer').addEventListener('keydown',function(e){
-  if(e.key==='ArrowLeft')slideshowNav(-1);
-  if(e.key==='ArrowRight')slideshowNav(1);
-  if(e.key==='Escape')closeFullscreen();
-});
-document.getElementById('fullscreen-viewer').setAttribute('tabindex','0');
-(function(){
-  var viewer=document.getElementById('fullscreen-viewer');
-  var touchStartX=0;
-  viewer.addEventListener('touchstart',function(e){touchStartX=e.touches[0].clientX;},{passive:true});
-  viewer.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-touchStartX;if(Math.abs(dx)>50){slideshowNav(dx<0?1:-1);}},{passive:true});
-})();
-
-async function loadBucket(){
-  var el=document.getElementById('roadmap-stops');
-  el.innerHTML='<div class="loading-dots"><span></span><span></span><span></span></div>';
-  try{
-    var data=await supa('bucket_list?order=created_at.asc&select=*');
-    if(!data.length){
-      el.innerHTML='<div class="empty-state">nothing on the journey yet — dream big</div>';
-      document.getElementById('road-path').style.display='none';
-      document.getElementById('bucket-progress-wrap').style.display='none';
-      return;
-    }
-    document.getElementById('road-path').style.display='block';
-    var done=data.filter(function(b){return b.completed;}).length;
-    var total=data.length;
-    var pct=total?Math.round((done/total)*100):0;
-    document.getElementById('bucket-progress-wrap').style.display='block';
-    document.getElementById('bucket-progress-text').textContent=done+' of '+total+' done';
-    document.getElementById('bucket-progress-fill').style.width=pct+'%';
-    el.innerHTML=data.map(function(b,i){return buildStop(b,i);}).join('');
-  }catch(e){el.innerHTML='<div class="empty-state">could not load list</div>';}
-}
-
-var stopEmojis=['&#127800;','&#127807;','&#9992;&#65039;','&#127754;','&#127811;','&#11088;','&#127769;','&#127819;','&#127802;','&#127968;','&#127759;','&#127957;','&#127836;','&#127917;','&#127749;'];
-function buildStop(b,i){
-  var links='';
-  if(b.link)links+='<a class="stop-link" href="'+esc(b.link)+'" target="_blank" rel="noopener">&#8599; link</a>';
-  if(b.file_url)links+='<a class="stop-link" href="'+esc(b.file_url)+'" target="_blank" rel="noopener">&#128206; file</a>';
-  var emoji=b.completed?'':stopEmojis[i%stopEmojis.length];
-  return '<div class="road-stop">'+
-    '<div class="stop-node'+(b.completed?' done':'')+'" onclick="toggleBucket(\''+b.id+'\','+b.completed+')" title="mark done">'+emoji+'</div>'+
-    '<div class="stop-card">'+
-      '<div class="stop-title'+(b.completed?' done-text':'')+'">'+esc(b.title)+'</div>'+
-      (b.description?'<div class="stop-desc">'+esc(b.description)+'</div>':'')+
-      (links?'<div class="stop-links">'+links+'</div>':'')+
-      '<div class="stop-actions"><button class="btn btn-danger btn-sm" onclick="deleteBucket(\''+b.id+'\')">remove</button></div>'+
-    '</div>'+
-  '</div>';
-}
-
-async function submitBucket(){
-  var title=document.getElementById('bucket-title').value.trim();
-  if(!title){toast('give it a title');return;}
-  var description=document.getElementById('bucket-desc').value.trim()||null;
-  var link=document.getElementById('bucket-link').value.trim()||null;
-  var fileInput=document.getElementById('bucket-file-input');
-  var file=fileInput.files[0];
-  try{
-    var file_url=null;
-    if(file){var path='bucket/'+Date.now()+'-'+sanitizeName(file.name);file_url=await uploadToStorage(path,file);}
-    await supa('bucket_list',{method:'POST',body:JSON.stringify({title:title,description:description,link:link,file_url:file_url})});
-    document.getElementById('bucket-title').value='';
-    document.getElementById('bucket-desc').value='';
-    document.getElementById('bucket-link').value='';
-    fileInput.value='';
-    document.getElementById('bucket-file-prev').textContent='';
-    closeDrawer();toast('added to the journey \u2661');loadBucket();
-  }catch(e){toast('something went wrong');}
-}
-
-async function toggleBucket(id,current){
-  try{await supa('bucket_list?id=eq.'+id,{method:'PATCH',body:JSON.stringify({completed:!current})});loadBucket();}
-  catch(e){toast('could not update');}
-}
-
-async function deleteBucket(id){
-  var ok=await showConfirm('remove from the journey?','this cannot be undone.','remove');
-  if(!ok)return;
-  try{await supa('bucket_list?id=eq.'+id,{method:'DELETE',headers:{'Prefer':''}});toast('removed');loadBucket();}
-  catch(e){toast('could not remove');}
-}
-
-function giftFileType(fileType,fileUrl){
-  var t=(fileType||'').toLowerCase();
-  var u=(fileUrl||'').toLowerCase().split('?')[0];
-  if(t.startsWith('image')||/\.(jpe?g|png|gif|webp|avif|svg)$/.test(u))return 'image';
-  if(t.startsWith('audio')||/\.(mp3|ogg|wav|flac|aac|m4a|opus)$/.test(u))return 'audio';
-  if(t.startsWith('video')||/\.(mp4|webm|mov|ogv|mkv|avi)$/.test(u))return 'video';
-  if(t==='application/pdf'||u.endsWith('.pdf'))return 'pdf';
-  if(t==='text/html'||u.endsWith('.html')||u.endsWith('.htm'))return 'html';
-  if(t.includes('zip')||t.includes('rar')||t.includes('tar')||/\.(zip|rar|tar|gz|7z)$/.test(u))return 'archive';
-  if(t.includes('word')||t.includes('document')||/\.(docx?|odt)$/.test(u))return 'document';
-  return 'file';
-}
-
-function giftFileIcon(kind){
-  var m={image:'&#128247;',audio:'&#127925;',video:'&#127909;',pdf:'&#128196;',html:'&#127760;',archive:'&#128230;',document:'&#128211;',file:'&#128190;'};
-  return m[kind]||m.file;
-}
-
-function buildGiftCard(g){
-  var d=new Date(g.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
-  var kind=giftFileType(g.file_type,g.file_url);
-  var icon=giftFileIcon(kind);
-  var delBtn='<button class="gift-delete-btn" onclick="deleteGift(\''+g.id+'\')">&#x2715;</button>';
-  var preview='';
-  if(g.file_url){
-    var safeUrl=esc(g.file_url);
-    var safeMime=esc(g.file_type||'');
-    var safeTitle=esc(g.title);
-    if(kind==='image'){
-      preview='<img class="gift-preview-thumb" src="'+safeUrl+'" alt="'+safeTitle+'" onclick="openGiftViewer(\'image\',\''+safeUrl+'\',\''+safeTitle+'\',\''+safeUrl+'\')">';
-    }else if(kind==='audio'){
-      preview='<div class="gift-preview-audio"><audio controls preload="none" style="width:100%"><source src="'+safeUrl+'" type="'+safeMime+'">Your browser does not support audio.</audio></div>';
-    }else if(kind==='video'){
-      preview='<div class="gift-preview-video"><video controls preload="metadata" style="width:100%;max-height:200px;display:block;object-fit:contain"><source src="'+safeUrl+'" type="'+safeMime+'">Your browser does not support video.</video></div>';
-    }else if(kind==='pdf'){
-      preview='<button class="gift-open-btn" onclick="openGiftViewer(\'pdf\',\''+safeUrl+'\',\''+safeTitle+'\',\''+safeUrl+'\')">'+icon+' &nbsp;view pdf</button>';
-    }else if(kind==='html'){
-      preview='<button class="gift-open-btn" onclick="openGiftViewer(\'html\',\''+safeUrl+'\',\''+safeTitle+'\',\''+safeUrl+'\')">'+icon+' &nbsp;open interactive page</button>';
-    }else{
-      preview='<a class="gift-open-btn" href="'+safeUrl+'" target="_blank" rel="noopener" download>'+icon+' &nbsp;download '+kind+'</a>';
-    }
-  }
-  var hasMsg=g.message&&g.message.trim();
-  var msgBlock='';
-  if(hasMsg){
-    var needsExpand=g.message.length>120;
-    msgBlock='<div class="gift-body">'+
-      '<div class="gift-message" id="gm-'+g.id+'">'+esc(g.message)+
-        (needsExpand?'<div class="gift-message-fade" id="gmf-'+g.id+'"></div>':'')+
-      '</div>'+
-      (needsExpand?'<button class="btn btn-ghost btn-sm" id="gmb-'+g.id+'" style="margin-top:0.5rem" onclick="expandGiftMsg(\''+g.id+'\')">read more</button>':'')+
-    '</div>';
-  }
-  var dlBtn=g.file_url?'<a class="btn btn-ghost btn-sm" href="'+esc(g.file_url)+'" target="_blank" rel="noopener" download>download</a>':'';
-  return '<div class="gift-card" id="gc-'+g.id+'">'+
-    delBtn+
-    '<div class="gift-card-top">'+
-      '<div>'+
-        '<span class="gift-icon">'+icon+'</span>'+
-        '<div class="gift-title">'+esc(g.title)+'</div>'+
-      '</div>'+
-      '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.4rem">'+
-        '<span class="gift-type-badge">'+kind+'</span>'+
-        '<span class="gift-from-badge">from '+esc(g.from_author)+'</span>'+
-      '</div>'+
-    '</div>'+
-    preview+
-    msgBlock+
-    '<div class="gift-footer">'+
-      '<span class="gift-date">'+d+'</span>'+
-      dlBtn+
-    '</div>'+
-  '</div>';
-}
-
-function openGiftViewer(kind,url,title,downloadUrl){
-  var inner=document.getElementById('gift-viewer-inner');
-  var dl=document.getElementById('gift-viewer-download');
-  var ttl=document.getElementById('gift-viewer-title');
-  inner.innerHTML='';
-  ttl.textContent=title||'';
-  dl.href=downloadUrl||url;
-  dl.style.display=(kind==='html')?'none':'';
-  if(kind==='image'){
-    var img=document.createElement('img');
-    img.src=url;img.alt=title||'';
-    inner.appendChild(img);
-  }else if(kind==='video'){
-    var vid=document.createElement('video');
-    vid.controls=true;vid.autoplay=true;
-    var src=document.createElement('source');src.src=url;
-    vid.appendChild(src);inner.appendChild(vid);
-  }else if(kind==='audio'){
-    var aud=document.createElement('audio');
-    aud.controls=true;aud.autoplay=true;
-    var asrc=document.createElement('source');asrc.src=url;
-    aud.appendChild(asrc);inner.appendChild(aud);
-  }else if(kind==='pdf'){
-    var fr=document.createElement('iframe');
-    fr.src=url+'#toolbar=1&navpanes=1&scrollbar=1&view=FitH';
-    fr.title=title||'PDF';
-    inner.appendChild(fr);
-  }else if(kind==='html'){
-    var ifr=document.createElement('iframe');
-    ifr.title=title||'page';
-    ifr.sandbox='allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-pointer-lock allow-top-navigation-by-user-activation';
-    ifr.style.opacity='0';
-    ifr.style.transition='opacity 0.35s ease';
-    inner.appendChild(ifr);
-    var loader=document.createElement('div');
-    loader.id='html-viewer-loader';
-    loader.style.cssText='position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;color:rgba(255,255,255,0.5);font-family:\'Jost\',sans-serif;font-size:0.78rem;letter-spacing:0.2em;text-transform:uppercase;';
-    loader.innerHTML='<div style="width:36px;height:36px;border:2px solid rgba(255,255,255,0.15);border-top-color:rgba(255,255,255,0.6);border-radius:50%;animation:spin 0.8s linear infinite"></div>loading gift…';
-    if(!document.getElementById('spin-style')){
-      var ss=document.createElement('style');
-      ss.id='spin-style';
-      ss.textContent='@keyframes spin{to{transform:rotate(360deg)}}';
-      document.head.appendChild(ss);
-    }
-    inner.appendChild(loader);
-    fetch(url)
-      .then(function(res){
-        if(!res.ok)throw new Error('HTTP '+res.status);
-        return res.text();
-      })
-      .then(function(html){
-        var blob=new Blob([html],{type:'text/html'});
-        var blobUrl=URL.createObjectURL(blob);
-        ifr.onload=function(){
-          loader.remove();
-          ifr.style.opacity='1';
-          setTimeout(function(){URL.revokeObjectURL(blobUrl);},5000);
-        };
-        ifr.src=blobUrl;
-      })
-      .catch(function(err){
-        loader.innerHTML='<span style="color:rgba(255,120,120,0.8)">could not load gift page<br><small style="font-size:0.68rem;opacity:0.7">'+err.message+'</small></span>';
-      });
-  }
-  document.getElementById('gift-viewer').classList.add('open');
-  document.addEventListener('keydown',giftViewerKeyClose);
-}
-
-function closeGiftViewer(){
-  var viewer=document.getElementById('gift-viewer');
-  viewer.classList.remove('open');
-  document.getElementById('gift-viewer-inner').innerHTML='';
-  document.removeEventListener('keydown',giftViewerKeyClose);
-}
-
-function giftViewerKeyClose(e){
-  if(e.key==='Escape')closeGiftViewer();
-}
-
-function expandGiftMsg(id){
-  var el=document.getElementById('gm-'+id);
-  var fade=document.getElementById('gmf-'+id);
-  var btn=document.getElementById('gmb-'+id);
-  var expanded=el.classList.toggle('expanded');
-  if(fade)fade.style.opacity=expanded?'0':'1';
-  if(btn)btn.textContent=expanded?'collapse':'read more';
-}
-
-async function loadGifts(){
-  var el=document.getElementById('gifts-grid');
-  el.innerHTML='<div class="loading-dots"><span></span><span></span><span></span></div>';
-  try{
-    var data=await supa('digital_gifts?order=created_at.desc&select=*');
-    if(!data.length){
-      el.innerHTML='<div class="empty-state" style="grid-column:1/-1">no gifts yet — give something</div>';
-      return;
-    }
-    el.innerHTML=data.map(function(g){return buildGiftCard(g);}).join('');
-  }catch(e){
-    el.innerHTML='<div class="empty-state">could not load gifts — make sure the digital_gifts table exists in Supabase</div>';
-  }
-}
-
-async function submitGift(){
-  var author=document.getElementById('gift-author').value;
-  var title=document.getElementById('gift-title').value.trim();
-  var message=document.getElementById('gift-message').value.trim()||null;
-  var fileInput=document.getElementById('gift-file-input');
-  var file=fileInput.files[0];
-  if(!title){toast('give it a title');return;}
-  if(!file&&!message){toast('attach a file or write a message');return;}
-  try{
-    var file_url=null;
-    var file_type=null;
-    if(file){
-      var path='gifts/'+Date.now()+'-'+sanitizeName(file.name);
-      file_url=await uploadToStorage(path,file);
-      file_type=file.type||null;
-    }
-    await supa('digital_gifts',{method:'POST',body:JSON.stringify({
-      from_author:author,title:title,message:message,
-      file_url:file_url,file_type:file_type
-    })});
-    document.getElementById('gift-title').value='';
-    document.getElementById('gift-message').value='';
-    fileInput.value='';
-    document.getElementById('gift-file-prev').textContent='';
-    closeDrawer();toast('gift sent \u2661');loadGifts();
-  }catch(e){toast('something went wrong: '+e.message);}
-}
-
-async function deleteGift(id){
-  var ok=await showConfirm('delete this gift?','this cannot be undone.','delete');
-  if(!ok)return;
-  try{
-    await supa('digital_gifts?id=eq.'+id,{method:'DELETE',headers:{'Prefer':''}});
-    toast('deleted');loadGifts();
   }catch(e){toast('could not delete');}
 }
 </script>
